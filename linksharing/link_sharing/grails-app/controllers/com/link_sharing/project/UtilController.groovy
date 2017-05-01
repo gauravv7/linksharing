@@ -10,5 +10,7 @@ class UtilController {
         log.warn("warning..")
         log.error("error....")
 
+        log.info("Params ${params}")
+        render "Params :  ${params}"
     }
 }
