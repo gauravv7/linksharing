@@ -1,4 +1,4 @@
-package link_sharing
+package com.link_sharing.project
 
 class BootStrap {
 

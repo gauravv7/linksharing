@@ -2,7 +2,7 @@
 grails:
     profile: web
     codegen:
-        defaultPackage: link_sharing
+        defaultPackage: com.link_sharing.project
     spring:
         transactionManagement:
             proxies: false
