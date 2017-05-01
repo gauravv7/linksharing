@@ -1,0 +1,14 @@
+1	Create basic grails app (linksharing) and add .gitignore files for excluding files from git
+2	Change default package of grails app in application.yml
+3	Use mysql as database in your application
+4	Use mysql jar in build.gradle 
+5	Update database drive class name in application.yml
+6	Create database with name linksharing 
+7	Update dbcreate property to update mode
+8	Udpate username password and database connection url according to the system
+9	Add index action in util controller and use different logging levels
+10	Updated logging and pattern in logback.groovy
+11	Added log statements of params in utilcontroller index action
+12	Add app context to / to remove app name in url
+13	Read config properties from external config and use BootStrap.groovy for verifying properties are actually read from external config
+
