@@ -2,6 +2,7 @@ package com.link_sharing.project
 
 import com.link_sharing.project.User as User
 import com.link_sharing.project.Subscription as Subscription
+import com.link_sharing.project.Resource as Resource
 
 class Topic {
 
@@ -14,7 +15,8 @@ class Topic {
     static belongsTo = [User]
 
     static hasMany = [
-            subscriptions: Subscription
+            subscriptions: Subscription,
+            resources: Resource,
     ]
 
     static constraints = {
