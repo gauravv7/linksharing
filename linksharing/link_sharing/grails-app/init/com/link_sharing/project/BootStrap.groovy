@@ -1,5 +1,6 @@
 package com.link_sharing.project
 
+import com.link_sharing.project.constants.Constants
 import grails.config.Config
 
 class BootStrap {
@@ -22,11 +23,10 @@ class BootStrap {
 
     void createUser() {
 
-
         User normalUser = new User(userName: "user", firstName: "normal", lastName: "normalLastName", email: "user@ttn.com",
-                password: "normal1", admin: false, active: false)
+                password: Constants.PASSWORD_NORMAL, admin: false, active: false)
         User adminUser = new User(userName: "admin", firstName: "admin", lastName: "adminLastName", email: "admin@ttnd.com",
-                password: "admin1", admin: true,active: true)
+                password: Constants.PASSWORD_ADMIN, admin: true,active: true)
 
         Integer countUsers = User.count()
 
@@ -47,7 +47,6 @@ class BootStrap {
             log.info "Users exists in the system "
         }
 
-
-
     }
+
 }
