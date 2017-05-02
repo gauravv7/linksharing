@@ -28,5 +28,8 @@ class BootStrap {
         User adminUser = new User(userName: "admin", firstName: "admin", lastName: "adminLastName", email: "admin@ttnd.com",
                 password: "admin1", admin: true,active: true)
 
+        normalUser.save(flush:true,failOnError:true)
+        adminUser.save(flush:true,failOnError:true)
+
     }
 }
