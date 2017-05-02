@@ -17,6 +17,7 @@ class BootStrap {
         log.info("Value for sample.config configuration property = $sampleConfigValue")
 
         createUser()
+        createTopics()
     }
     def destroy = {
     }
@@ -48,5 +49,7 @@ class BootStrap {
         }
 
     }
+
+    void createTopics(){}
 
 }
