@@ -28,22 +28,25 @@ class BootStrap {
         User adminUser = new User(userName: "admin", firstName: "admin", lastName: "adminLastName", email: "admin@ttnd.com",
                 password: "admin1", admin: true,active: true)
 
-        log.info "Creating new users "
-        if (normalUser.save(flush:true,failOnError:true)) {
+        Integer countUsers = User.count()
 
-            log.info "${normalUser} saved"
+        if (!countUsers) {
 
+            log.info "Creating new users "
+            if (normalUser.save(flush:true,failOnError:true)) {
+                log.info "${normalUser} saved"
+            } else {
+                log.error "${normalUser} cannot be saved--- ${normalUser.errors.allErrors}"
+            }
+            if (adminUser.save(flush:true,failOnError:true)) {
+                log.info "${adminUser} saved"
+            } else {
+                log.error "${adminUser} cannot be saved--- ${adminUser.errors.allErrors}"
+            }
         } else {
-            log.error "${normalUser} cannot be saved--- ${normalUser.errors.allErrors}"
+            log.info "Users exists in the system "
         }
 
-        if (adminUser.save(flush:true,failOnError:true)) {
-
-            log.info "${adminUser} saved"
-
-        } else {
-            log.error "${adminUser} cannot be saved--- ${adminUser.errors.allErrors}"
-        }
 
 
     }
