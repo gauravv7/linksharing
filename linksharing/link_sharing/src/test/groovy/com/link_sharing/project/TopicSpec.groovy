@@ -12,7 +12,7 @@ import com.link_sharing.project.Topic as Topic
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
 @TestFor(Topic)
-@Mock([User])
+@Mock([User, Subscription])
 class TopicSpec extends Specification {
 
     @Unroll("Topic Constraints: #sno")

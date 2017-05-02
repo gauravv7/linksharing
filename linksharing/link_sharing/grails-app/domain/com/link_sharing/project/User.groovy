@@ -1,6 +1,7 @@
 package com.link_sharing.project
 
 import com.link_sharing.project.Topic as Topic
+import com.link_sharing.project.Subscription as Subscription
 
 class User {
 
@@ -16,7 +17,10 @@ class User {
     Date dateCreated;
     Date lastUpdated;
 
-    static hasMany = [topics : com.link_sharing.project.Topic]
+    static hasMany = [
+            topics : Topic,
+            subscriptions: Subscription
+    ]
 
     static transients = ['fullName']
 
