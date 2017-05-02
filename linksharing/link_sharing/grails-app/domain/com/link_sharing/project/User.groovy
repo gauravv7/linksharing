@@ -3,6 +3,7 @@ package com.link_sharing.project
 import com.link_sharing.project.Topic as Topic
 import com.link_sharing.project.Subscription as Subscription
 import com.link_sharing.project.Resource as Resource
+import com.link_sharing.project.ReadingItem as ReadingItem
 
 class User {
 
@@ -22,9 +23,14 @@ class User {
             topics : Topic,
             subscriptions: Subscription,
             resources: Resource,
+            readingItems: ReadingItem
     ]
 
     static transients = ['fullName']
+
+    static mapping = {
+        photo(sqlType: 'longblob')
+    }
 
     static constraints = {
 

@@ -3,6 +3,7 @@ package com.link_sharing.project
 import com.link_sharing.project.User as User
 import com.link_sharing.project.Topic as Topic
 import com.link_sharing.project.ResourceRating as ResourceRating
+import com.link_sharing.project.ReadingItem as ReadingItem
 
 abstract class Resource {
 
@@ -12,7 +13,10 @@ abstract class Resource {
     Date dateCreated
     Date lastUpdated
 
-    static hasMany = [ratings : ResourceRating]
+    static hasMany = [
+            ratings : ResourceRating,
+            readingItems: ReadingItem
+    ]
 
     static mapping = {
         description(type: 'text')
