@@ -1,5 +1,7 @@
 package com.link_sharing.project
 
+import com.link_sharing.project.Topic as Topic
+
 class User {
 
     String email;
@@ -14,6 +16,7 @@ class User {
     Date dateCreated;
     Date lastUpdated;
 
+    static hasMany = [topics : com.link_sharing.project.Topic]
 
     static transients = ['fullName']
 
