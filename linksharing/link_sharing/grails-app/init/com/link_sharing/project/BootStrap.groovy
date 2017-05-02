@@ -50,6 +50,15 @@ class BootStrap {
 
     }
 
-    void createTopics(){}
+    void createTopics(){
+        if(Topic.count==0){
+            User.list().each{
+                user-> (1..5).each {
+                    it ->
+                        new Topic(topicName: "t$user.id-$it", createdBy: user, visibility: Visibility.PUBLIC).save()
+                }
+            }
+        }
+    }
 
 }
