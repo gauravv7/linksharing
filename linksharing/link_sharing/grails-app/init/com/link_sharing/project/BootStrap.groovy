@@ -18,6 +18,7 @@ class BootStrap {
 
         createUser()
         createTopics()
+        createResources()
     }
     def destroy = {
     }
@@ -61,4 +62,37 @@ class BootStrap {
         }
     }
 
+    void createResources() {
+
+        Topic.list().each { Topic topic ->
+            Integer countResources = Resource.countByTopic(topic)
+
+            if (!countResources) {
+                2.times {
+                    Resource documentResource = new DocumentResource(description: "topic ${topic} doc", createdBy: topic
+                            .createdBy, filePath: "file/path", topic: topic)
+
+                    Resource linkResource = new LinkResource(description: "topic ${topic} link", createdBy: topic
+                            .createdBy, url: "https://www.google.co.in", topic: topic)
+
+                    if (documentResource.save(flush:true)) {
+                        log.info "${documentResource} saved by ${topic.createdBy} for ${topic}"
+                        topic.addToResources(documentResource)
+                        topic.createdBy.addToResources(documentResource)
+                    } else {
+                        log.error "${documentResource} not saved--- ${documentResource.errors.allErrors}"
+                    }
+
+                    if (linkResource.save(flush:true)) {
+                        log.info "${linkResource} saved by ${topic.createdBy} for ${topic}"
+                        topic.addToResources(linkResource)
+                        topic.createdBy.addToResources(linkResource)
+                    } else {
+                        log.error "${linkResource} not saved--- ${linkResource.errors.allErrors}"
+                    }
+                } // 2.times
+
+            } // countResources
+        } // topics each
+    }
 }
