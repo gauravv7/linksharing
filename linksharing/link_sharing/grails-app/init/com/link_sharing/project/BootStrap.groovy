@@ -20,6 +20,7 @@ class BootStrap {
         createTopics()
         createResources()
         subscribeTopics()
+        createReadingItems()
     }
     def destroy = {
     }
@@ -116,6 +117,33 @@ class BootStrap {
                     log.info "User ${user} already subscribed to Topic ${topic}"
                 }
             } //topic list
+        } // user list
+    }
+
+    void createReadingItems() {
+
+        User.list().each { User user ->
+            Topic.list().each { Topic topic ->
+
+                if (Subscription.findByCreatedByAndTopic(user, topic)) {
+                    topic.resources.each { resource ->
+
+                        if (resource.createdBy != user && !user.readingItems?.contains(resource)) {
+                            ReadingItem readingItem = new ReadingItem(user: user, resource: resource, isRead: false)
+
+                            if (readingItem.save(flush:true)) {
+
+                                log.info "${readingItem} saved in ${user}'s list"
+                                resource.addToReadingItems(readingItem)
+                                user.addToReadingItems(readingItem)
+
+                            } else {
+                                log.error "${readingItem} is not saved in ${user}'s list--- ${readingItem.errors.allErrors}"
+                            }
+                        }
+                    } // topic.resources
+                } // if subscription
+            } // topic list
         } // user list
     }
 }
