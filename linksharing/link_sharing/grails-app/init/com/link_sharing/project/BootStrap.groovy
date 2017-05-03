@@ -19,6 +19,7 @@ class BootStrap {
         createUser()
         createTopics()
         createResources()
+        subscribeTopics()
     }
     def destroy = {
     }
@@ -94,5 +95,27 @@ class BootStrap {
 
             } // countResources
         } // topics each
+    }
+
+    void subscribeTopics() {
+
+        User.list().each { User user ->
+            Topic.list().each { Topic topic ->
+
+                if (Subscription.findByCreatedByAndTopic(user, topic) == null) {
+                    Subscription subscription = new Subscription(createdBy: user, topic: topic, seriousness: Constants.SERIOUSNESS)
+
+                    if (subscription.save(flush:true)) {
+                        log.info "${subscription}-> ${user} subscribed for ${topic}"
+                        topic.addToSubscriptions(subscription)
+                        user.addToSubscriptions(subscription)
+                    } else {
+                        log.error "Subscription failed: ${subscription.errors.allErrors}"
+                    }
+                } else {
+                    log.info "User ${user} already subscribed to Topic ${topic}"
+                }
+            } //topic list
+        } // user list
     }
 }
