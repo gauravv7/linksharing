@@ -146,4 +146,28 @@ class BootStrap {
             } // topic list
         } // user list
     }
+
+    void createResourceRatings() {
+
+        User.list().each { User user ->
+            user.readingItems?.each { ReadingItem readingItem ->
+
+                if (!readingItem.isRead) {
+                    ResourceRating resourceRating = new ResourceRating(score: Constants.RATING, createdBy: readingItem.user,
+                            resource: readingItem.resource)
+
+                    if (resourceRating.save(flush:true)) {
+                        log.info "${resourceRating} rating for ${readingItem.resource} by ${readingItem.user}"
+                        readingItem.resource.addToRatings(resourceRating)
+                        readingItem.user.addToResourceRatings(resourceRating)
+                    } else {
+                        log.error "${resourceRating} rating not set for ${readingItem.resource} by ${readingItem.user} " +
+                                " ${resourceRating.errors.allErrors}"
+                    }
+                } else {
+                    log.info "${readingItem.user} cannot rate"
+                }
+            } // user.readingItems
+        } // user list
+    }
 }
