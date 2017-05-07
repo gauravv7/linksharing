@@ -4,7 +4,20 @@ class SubscriptionController {
 
     def index() { }
 
-    def save() {}
+    def save(Long topicId) {
+        Topic topic = Topic.get(topicId)
+        if (topic) {
+            User user = session.user
+            Subscription subscription = new Subscription(user: user, topic: topic,seriousness: Seriousness.CASUAL)
+            if (subscription.save(flush: true)) {
+                render flash.message = "Subscription saved successfully"
+            } else {
+                render flash.error = subscription.errors.allErrors.collect { message(error: it) }.join(", ")
+            }
+        } else {
+            flash.error = "Topic Does not Exist"
+        }
+    }
 
     def update() {}
 
