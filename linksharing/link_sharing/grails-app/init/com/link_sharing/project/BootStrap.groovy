@@ -28,9 +28,9 @@ class BootStrap {
     void createUser() {
 
         User normalUser = new User(userName: "user", firstName: "normal", lastName: "normalLastName", email: "user@ttn.com",
-                password: Constants.PASSWORD_NORMAL, admin: false, active: false)
+                password: Constants.PASSWORD_NORMAL, confirmPassword: Constants.PASSWORD_NORMAL, admin: false, active: false)
         User adminUser = new User(userName: "admin", firstName: "admin", lastName: "adminLastName", email: "admin@ttnd.com",
-                password: Constants.PASSWORD_ADMIN, admin: true,active: true)
+                password: Constants.PASSWORD_ADMIN, confirmPassword: Constants.PASSWORD_ADMIN, admin: true,active: true)
 
         Integer countUsers = User.count()
 
