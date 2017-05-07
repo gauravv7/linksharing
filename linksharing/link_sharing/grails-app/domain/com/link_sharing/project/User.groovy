@@ -18,6 +18,7 @@ class User {
     Boolean active;
     Date dateCreated;
     Date lastUpdated;
+    String confirmPassword
 
     static hasMany = [
             topics : Topic,
@@ -26,7 +27,7 @@ class User {
             readingItems: ReadingItem
     ]
 
-    static transients = ['fullName']
+    static transients = ['fullName', 'confirmPassword']
 
     static mapping = {
         photo(sqlType: 'longblob')
@@ -36,12 +37,16 @@ class User {
 
         email(unique: true, email: true, blank: false)
         userName(unique: true, blank: false)
-        password(minSize: 5, blank: false)
+        password(minSize: 5, blank: false, validator: {password, obj ->
+            def password2 = obj.confirmPassword
+            password2 == password ? true : ['password.mismatch']
+        })
         firstName(blank: false)
         lastName(blank: false)
         photo(nullable: true)
         admin(nullable: true)
         active(nullable: true)
+        confirmPassword(bindable: true, nullable: true, blank: true)
 
     }
 

@@ -21,7 +21,7 @@ class UserControllerSpec extends Specification {
     def "check index"() {
         setup:
         User user = new User(userName: "u1", password: Constants.PASSWORD_NORMAL,
-                firstName: "user1", lastName: "user1LastName", email: 'u1@u1.com', active: true, admin: true)
+                firstName: "user1", lastName: "user1LastName", email: 'u1@u1.com', active: true, admin: true, confirmPassword: Constants.PASSWORD_NORMAL)
         user.save(flush: true)
         session.user = user
 

@@ -14,7 +14,7 @@ class LoginControllerSpec extends Specification {
 
     def "check login for success"() {
         setup:
-        session.user = new User()
+        session['user'] = new User()
 
         when:
         controller.index()
@@ -47,7 +47,7 @@ class LoginControllerSpec extends Specification {
     def "Check loginHandler for valid user"() {
         setup:
         User user = new User(userName: "u1", password: Constants.PASSWORD_NORMAL,
-                firstName: "user1", lastName: "user1LastName", email: 'u1@u1.com', active: true, admin: true)
+                firstName: "user1", lastName: "user1LastName", email: 'u1@u1.com', active: true, admin: true, confirmPassword: Constants.PASSWORD_NORMAL)
         user.save(flush: true)
 
         when:
@@ -60,7 +60,7 @@ class LoginControllerSpec extends Specification {
     def "check loginHandler for inactive user"() {
         setup:
         User user = new User(userName: "u1", password: Constants.PASSWORD_NORMAL,
-                firstName: "user1", lastName: "user1LastName", email: 'u1@u1.com', active: false)
+                firstName: "user1", lastName: "user1LastName", email: 'u1@u1.com', active: false, confirmPassword: Constants.PASSWORD_NORMAL)
         user.save(flush: true)
 
         when:
@@ -73,7 +73,7 @@ class LoginControllerSpec extends Specification {
     def "check loginHandler for invalid user"() {
         setup:
         User user = new User(userName: "u1", password: Constants.PASSWORD_NORMAL,
-                firstName: "user1", lastName: "user1LastName", email: 'u1@u1.com')
+                firstName: "user1", lastName: "user1LastName", email: 'u1@u1.com', confirmPassword: Constants.PASSWORD_NORMAL)
 
         when:
         controller.loginHandler(user.userName, user.password)

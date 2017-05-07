@@ -1,9 +1,12 @@
 package com.link_sharing.project
 
+import com.link_sharing.project.constants.Constants
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 import com.link_sharing.project.User as MyUser
 import spock.lang.Unroll
+
+import java.awt.Container
 
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
@@ -20,7 +23,7 @@ class UserSpec extends Specification {
     void "testUserValidations"() {
         setup:
         MyUser user = new MyUser(email: email, userName: userName, password: password, firstName: fname, lastName: lname, photo: photo,
-                admin: admin, active: active)
+                admin: admin, active: active, confirmPassword: password)
         when:
         Boolean result = user.validate()
 
@@ -39,8 +42,8 @@ class UserSpec extends Specification {
         String email = "u1@gmail.com"
         String userName = "u1"
         String password = 'password'
-        MyUser user = new MyUser(email:email, userName: userName, password: password, firstName: "user1", lastName: "user1LastName", photo: null,
-                admin: true, active: true )
+        MyUser user = new MyUser(email:email, userName: userName, password: Constants.PASSWORD_NORMAL, firstName: "user1", lastName: "user1LastName", photo: null,
+                admin: true, active: true, confirmPassword: Constants.PASSWORD_NORMAL )
 
         when:
         user.save()
@@ -49,8 +52,8 @@ class UserSpec extends Specification {
         user.count() == 1
 
         when:
-        MyUser newUser = new MyUser(email:email, userName: userName, password: "123456", firstName: "user2", lastName: "user2LastName", photo: null,
-                admin: true, active: false)
+        MyUser newUser = new MyUser(email:email, userName: userName, password: Constants.PASSWORD_NORMAL, firstName: "user2", lastName: "user2LastName", photo: null,
+                admin: true, active: false, confirmPassword: Constants.PASSWORD_NORMAL)
         newUser.save()
 
         then:
