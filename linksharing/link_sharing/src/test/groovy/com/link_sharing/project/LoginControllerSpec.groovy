@@ -40,7 +40,7 @@ class LoginControllerSpec extends Specification {
 
         then:
         session.user == null
-        response.redirectedUrl == "/login/index"
+        response.redirectedUrl == "/"
     }
 
 
@@ -54,7 +54,7 @@ class LoginControllerSpec extends Specification {
         controller.loginHandler(user.userName, user.password)
 
         then:
-        response.redirectedUrl == '/login/index'
+        response.redirectedUrl == '/'
     }
 
     def "check loginHandler for inactive user"() {
