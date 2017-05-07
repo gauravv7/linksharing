@@ -26,4 +26,18 @@ class TopicController {
             redirect(controller:'login' , action:'index')
         }
     }
+
+    def delete(Long id) {
+
+        Topic topic = Topic.load(id)
+
+        if(topic) {
+            log.info("topic ${topic}")
+            topic.delete(flush:true)
+            render "success"
+        }
+        else {
+            render "topic not found."
+        }
+    }
 }
