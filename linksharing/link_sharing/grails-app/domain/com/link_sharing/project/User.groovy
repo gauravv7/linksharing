@@ -30,6 +30,7 @@ class User {
     static transients = ['fullName', 'confirmPassword']
 
     static mapping = {
+        id(sort: 'desc')
         photo(sqlType: 'longblob')
     }
 
