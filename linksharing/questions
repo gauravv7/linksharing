@@ -1,25 +1,21 @@
-     1	Add logincontroller with index,loginHandler and logout action
-     2	LoginController index action will check if there is session.user exists or not if exist forward to user controller index action else render failure
-     3	Add User controller with index action that will render text 'user dahsboard'
-     4	Login Controller logout action will do session.invalidate and forward the request to login controller index action
-     5	LoginController loginHandler action will take 2 argument username and password
-     6	If Loginhandler action finds user with given username and password then it will check user active or not if active set session.user to user and redirect request to login index action
-     7	If user is not active then set flash.error 'Your accoutn is not active'
-     8	If user is not found then flash.error is set to 'User not found' and flash.error is rendered - Urlmapping is updated for / action to controller login action index
-     9	Delete existing index.gsp file Added test cases for login controller
-    10	That should include testing of all conditions specified in above exercise 
-    11	Add Application Interceptor with logging params for all controller and actions
-    12	Add session check filter in application interceptor
-    13	Create loginCheck interceptor which will work all the controller except login
-    14	If session.user is not set then redirect user to login index, this should be done in interceptor - user index action should render session user username
-    15	Update test case for usercontroller index action Add show action for topic which will take id as a parameter
-    16	If topic do not exist in database then user should redirected to login index action and flash error should be set
-    17	If topic found and its a public topic then it should render sucess
-    18	If topic found is private then check the subscription of logged in user exist for the topic or not
-    19	If subscription exist then render success otherwise redirect user to login index and set flash error
-    20	Write test case for the same Adde validator and transient field for confirmpassword -Confirm password will be nullable true and blank true when user is updating but when its getting created it should match password and it cannot be null
-    21	Update bootstrap for user creation Create register action in login controller to register user
-    22	Errors with proper message properties should be rendered if user is not set and flash message should be set.
-    23	If user is set the success should be rendered - Validation message should be on email(null,blank,email,unique), username(null,blank,unique), firstName(null,blank), lastName (null,blank), password(null,blank,minsize), confirmPassword (null,blank,customvalidator)
-    24	Render validation errors using message tag No need to create UI for this just send the parameter through url.
+     1	Add default sorting: - Topic domain should be default sorted by name asc
+     2	-User should be default sorted by the id desc so that latest created user comes first
+     3	Use read() for /topic/show and load() for /resource/delete & /topic/delete action.
+     4	Exception of object not found should be handled in resource delete
+     5	Add topic save action in TopicController
+     6	Add save action in topic controller, which takes a topic and string seriousness as an argument
+     7	Create a method in visibility enum to convert string into enum and write test case for the same
+     8	Session user should be createdBy of the topic
+     9	If a topic is saved without error flash message should be set and success should be rendered
+    10	If a topic is not saved errors should be logged flash error should be set and error text should be rendered
+    11	Write the test case for the Topic save.
+    12	Write a test case for topic deletion.
+    13	Subscription domain should have a default seriousness as Serious.
+    14	Implement subscription save, update, delete
+    15	Create subscription delete action which takes id as parameter, if it exist then delete and send success else render not found
+    16	Create save action which takes id as parameter for topic id, user for subscription should be read from the session, if subscription save render success else errors -
+    17	Create update action which takes an id and serious as a parameter if subscription and seriousness found, then save else render not found, if saved then render success else errors
+    18	Create static method in seriuosness which take string as parameter and returns seriousness, it should be case insensitive
+    19	Write the test cases for subscription save, update, delete functionality.
+    20	Use eager fetching for topic and user in subscription
 
