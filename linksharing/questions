@@ -1,30 +1,25 @@
-1	Add createUsers method to Bootstrap to create 1 admin and 1 normal user.
-2	Use failOnError and flush true for persisting users
-3	Use log info statements for data creation and log error if there are any errors
-4	Users will be created only when there are no records in user table
-5	Add constants file for default password
-6	Add createTopics method in bootstrap
-7	5 topics per user needs to be created if Topic count is 0
-8	Creator of topic should automatically be subscribed to topic (Use after insert event of topic)
-9	Errors should be logged if topic or subscriptions is not saved
-10	WithNewSession in after insert because it will not work without it
-11	Seriousness should be very serious for auto subscribed topic in after insert
-12	Add createResources method which create 2 link resource and 2 document resource in each topic
-13	It should create resource only if there is not data in resource table
-14	Description of the resource should include topic name
-15	Error should be logged
-16	Creator of the resource should be same as creator of the topic
-17	Add subscribeTopics for user to subscribe all the topics which are not created by user
-18	Subscription should be created only if the subscription do not exit for user and topic 
-19	Errors should be logged
-20	log statement when subscription is created with user and topic object
-21	toString should be implemented for Topic with topic name and for User with username
-22	Add createReadingItems in bootstrap to create dummy reading items
-23	Resources which are not created by the user in the topics subscribed by him/her should have in his/her reading item.
-24	Reading item of resource should be created only if it does not already exit in users reading item
-25	Add createResourceRatings to add dummy ratings
-26	Add rating for all the unread reading items of the user
-27	createdBy of resourcerating should be createdby of reading item and resource of resourcerating should be resource of readingitem
-28	Add test cases for tostring of Topic and User
-29	Add toString for linkresource with url
-30	Add test case for document resource and linkresource tostring
+     1	Add logincontroller with index,loginHandler and logout action
+     2	LoginController index action will check if there is session.user exists or not if exist forward to user controller index action else render failure
+     3	Add User controller with index action that will render text 'user dahsboard'
+     4	Login Controller logout action will do session.invalidate and forward the request to login controller index action
+     5	LoginController loginHandler action will take 2 argument username and password
+     6	If Loginhandler action finds user with given username and password then it will check user active or not if active set session.user to user and redirect request to login index action
+     7	If user is not active then set flash.error 'Your accoutn is not active'
+     8	If user is not found then flash.error is set to 'User not found' and flash.error is rendered - Urlmapping is updated for / action to controller login action index
+     9	Delete existing index.gsp file Added test cases for login controller
+    10	That should include testing of all conditions specified in above exercise 
+    11	Add Application Interceptor with logging params for all controller and actions
+    12	Add session check filter in application interceptor
+    13	Create loginCheck interceptor which will work all the controller except login
+    14	If session.user is not set then redirect user to login index, this should be done in interceptor - user index action should render session user username
+    15	Update test case for usercontroller index action Add show action for topic which will take id as a parameter
+    16	If topic do not exist in database then user should redirected to login index action and flash error should be set
+    17	If topic found and its a public topic then it should render sucess
+    18	If topic found is private then check the subscription of logged in user exist for the topic or not
+    19	If subscription exist then render success otherwise redirect user to login index and set flash error
+    20	Write test case for the same Adde validator and transient field for confirmpassword -Confirm password will be nullable true and blank true when user is updating but when its getting created it should match password and it cannot be null
+    21	Update bootstrap for user creation Create register action in login controller to register user
+    22	Errors with proper message properties should be rendered if user is not set and flash message should be set.
+    23	If user is set the success should be rendered - Validation message should be on email(null,blank,email,unique), username(null,blank,unique), firstName(null,blank), lastName (null,blank), password(null,blank,minsize), confirmPassword (null,blank,customvalidator)
+    24	Render validation errors using message tag No need to create UI for this just send the parameter through url.
+
