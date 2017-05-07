@@ -15,6 +15,10 @@ class Topic {
 
     static belongsTo = [User]
 
+    static mappings = {
+        sort "topicName" : 'asc'
+    }
+
     static hasMany = [
             subscriptions: Subscription,
             resources: Resource,
