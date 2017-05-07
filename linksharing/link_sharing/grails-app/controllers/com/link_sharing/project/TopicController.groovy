@@ -40,4 +40,6 @@ class TopicController {
             render "topic not found."
         }
     }
+
+    def save() { }
 }
