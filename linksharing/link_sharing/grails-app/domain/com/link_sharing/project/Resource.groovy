@@ -5,6 +5,7 @@ import com.link_sharing.project.Topic as Topic
 import com.link_sharing.project.ResourceRating as ResourceRating
 import com.link_sharing.project.ReadingItem as ReadingItem
 import com.link_sharing.project.co.ResourceSearchCO
+import com.link_sharing.project.vo.RatingInfoVO
 
 abstract class Resource {
 
@@ -13,6 +14,8 @@ abstract class Resource {
     Topic topic
     Date dateCreated
     Date lastUpdated
+
+    static transients = ['ratingInfo']
 
     static hasMany = [
             ratings : ResourceRating,
@@ -44,6 +47,19 @@ abstract class Resource {
             }
 
         }
+    }
+
+    RatingInfoVO getRatingInfo() {
+        List result = ResourceRating.createCriteria().get {
+            projections {
+                count('id', 'totalVotes')
+                avg('score')
+                sum('score')
+            }
+            eq('resource', this)
+            order('totalVotes', 'desc')
+        }
+        new RatingInfoVO(totalVotes: result[0], averageScore: result[1], totalScore: result[2])
     }
 
     String toString() {
