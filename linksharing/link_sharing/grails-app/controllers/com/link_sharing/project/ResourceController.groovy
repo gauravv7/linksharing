@@ -1,5 +1,7 @@
 package com.link_sharing.project
 
+import com.link_sharing.project.co.ResourceSearchCO
+
 class ResourceController {
 
     def index() { }
@@ -17,4 +19,15 @@ class ResourceController {
             render "Resource not found."
         }
     }
+
+    def search(ResourceSearchCO resourceSearchCO) {
+        def r
+        if (resourceSearchCO.q) {
+            resourceSearchCO.visibility = Visibility.PUBLIC
+            r = Resource.search(resourceSearchCO).list()
+        }
+
+        render r
+    }
+
 }

@@ -35,6 +35,11 @@ abstract class Resource {
                 if (resourceSearchCO.topicID) {
                     eq('topic.id', resourceSearchCO.topicID)
                 }
+                if (resourceSearchCO.visibility && resourceSearchCO.visibility == Visibility.PUBLIC) {
+                    'topic' {
+                        eq('visibility', Visibility.PUBLIC)
+                    }
+                }
                 ilike('description', "%${resourceSearchCO.q}%")
             }
 
