@@ -19,7 +19,29 @@ class SubscriptionController {
         }
     }
 
-    def update() {}
+    def update(Long topicId, String serious) {
+
+        Topic topic = Topic?.get(topicId)
+        User user = session.user
+        Subscription subscription = Subscription.findByCreatedByAndTopic(user, topic)
+
+        if (subscription) {
+            if (Seriousness.checkSeriousness(serious) != null) {
+                subscription.seriousness = Seriousness.checkSeriousness(serious)
+
+                if (subscription.save(flush: true)) {
+                    render flash.message = "subscription saved successfully"
+
+                } else {
+                    render flash.error = "error saving subscription"
+                }
+            } else {
+                render flash.error = "seriousness string is not correct, please try again"
+            }
+        } else {
+            render flash.error = "subscription not found"
+        }
+    }
 
     def delete(Long topicId) {
         Topic topic = Topic.get(topicId)
