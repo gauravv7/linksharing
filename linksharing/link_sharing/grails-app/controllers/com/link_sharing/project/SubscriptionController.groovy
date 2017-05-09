@@ -8,7 +8,7 @@ class SubscriptionController {
         Topic topic = Topic.get(topicId)
         if (topic) {
             User user = session.user
-            Subscription subscription = new Subscription(user: user, topic: topic,seriousness: Seriousness.CASUAL)
+            Subscription subscription = new Subscription(createdBy: user, topic: topic,seriousness: Seriousness.CASUAL)
             if (subscription.save(flush: true)) {
                 render flash.message = "Subscription saved successfully"
             } else {
