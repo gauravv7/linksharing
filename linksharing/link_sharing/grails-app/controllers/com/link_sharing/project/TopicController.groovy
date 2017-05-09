@@ -1,5 +1,7 @@
 package com.link_sharing.project
 
+import com.link_sharing.project.Visibility
+
 class TopicController {
 
     def index() { }
@@ -26,4 +28,38 @@ class TopicController {
             redirect(controller:'login' , action:'index')
         }
     }
+
+    def delete(Long id) {
+
+        Topic topic = Topic.load(id)
+
+        if(topic) {
+            log.info("topic ${topic}")
+            topic.delete(flush:true)
+            render "success"
+        }
+        else {
+            render "topic not found."
+        }
+    }
+
+    def save(String topicName,String visibility) {
+
+        if(session.user) {
+
+            Topic topic = new Topic(topicName: topicName, createdBy: session.user, visibility: Visibility.checkVisibility(visibility.trim().toLowerCase()))
+            topic.createdBy = session.user
+
+            log.info("topic: ${topic}")
+            topic.save(flush:true)
+
+            if(topic.hasErrors()) {
+                flash.error = topic.errors.allErrors.join(", ")
+                render([error: 'an error occurred'])
+            } else {
+                flash.message = "success"
+                render "success"
+            } // hasErrors
+        } // session user
+    } // save
 }

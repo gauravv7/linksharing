@@ -61,4 +61,26 @@ class TopicControllerSpec extends Specification {
         then:
         response.redirectedUrl == "/"
     }
+
+    def "check topic save"() {
+
+        setup:
+        User user = new User(userName: "user5", active: true, password: Constants.PASSWORD_NORMAL
+                , firstName: "Name", lastName: "Lname", email: "user5@ttnd.com", confirmPassword: Constants.PASSWORD_NORMAL)
+
+        user.save(flush:true)
+
+        String topicName='groovy'
+        String visibility=Visibility.checkVisibility("public")
+        Topic topic = new Topic(topicName:topicName, visibility: visibility, createdBy: user)
+        session.user = user
+        topic.save(flush:true)
+
+        when:
+        controller.save(topicName,"public")
+
+        then:
+        response.text == "success"
+    }
+
 }

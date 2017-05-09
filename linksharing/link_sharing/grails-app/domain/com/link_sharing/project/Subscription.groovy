@@ -12,6 +12,10 @@ class Subscription {
     Date dateCreated
     Date lastUpdated
 
+    static mapping = {
+        seriousness defaultValue: Seriousness.SERIOUS
+    }
+
     static constraints = {
         topic(unique: ['createdBy'])
         seriousness(nullable: false)
