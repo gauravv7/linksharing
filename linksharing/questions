@@ -1,21 +1,41 @@
-     1	Add default sorting: - Topic domain should be default sorted by name asc
-     2	-User should be default sorted by the id desc so that latest created user comes first
-     3	Use read() for /topic/show and load() for /resource/delete & /topic/delete action.
-     4	Exception of object not found should be handled in resource delete
-     5	Add topic save action in TopicController
-     6	Add save action in topic controller, which takes a topic and string seriousness as an argument
-     7	Create a method in visibility enum to convert string into enum and write test case for the same
-     8	Session user should be createdBy of the topic
-     9	If a topic is saved without error flash message should be set and success should be rendered
-    10	If a topic is not saved errors should be logged flash error should be set and error text should be rendered
-    11	Write the test case for the Topic save.
-    12	Write a test case for topic deletion.
-    13	Subscription domain should have a default seriousness as Serious.
-    14	Implement subscription save, update, delete
-    15	Create subscription delete action which takes id as parameter, if it exist then delete and send success else render not found
-    16	Create save action which takes id as parameter for topic id, user for subscription should be read from the session, if subscription save render success else errors -
-    17	Create update action which takes an id and serious as a parameter if subscription and seriousness found, then save else render not found, if saved then render success else errors
-    18	Create static method in seriuosness which take string as parameter and returns seriousness, it should be case insensitive
-    19	Write the test cases for subscription save, update, delete functionality.
-    20	Use eager fetching for topic and user in subscription
+1. Add search named query for resources.
+	-Add String q, Integer max,Integer offset,String order, String sort parameter in searchCO which will be used for text search
+	-Create ResourceSearchCo which extend searchCO and add topicId long field into it to get resource specific to topic
+	-Create named query 'search' which takes ResourceSearchCO as argument and find resources specific to topic id.
+	-Update topic show action which will take ResourceSearchCO as an argument other than long id
 
+2. Add resource/search action for resource search in public topics
+	-Update ResourceSearchCO and add visibility field in it
+	-Updated Resource search named query and add condition to search topic with specified visibility
+	-Add search action in a resource controller, which will search if q parameter is set and it will set visibility of resourcesearchco to public
+
+3. Create method in resource to get rating details like totalvotes, avgscore, totalscore of a resource
+	-Create transient in resource ratingInfo and create method which will return RatingInfoVO
+	-RatingInfoVO will have fields totalVotes, averageScore, totalScore
+	-Write criteria query to get the above information.
+	-Call this method from resource show action
+
+4. Add resource show action and get trending topics also
+	- Public Topic with maximum resources is considered as a trending topic
+	- Create static method getTrendingTopics in Topic domain which will return list of TopicVO
+	- TopicVO will have id,name,visibility,count,createdBy fields
+	- Use createalias and groupproperty in criteria
+	- Use count for getting count of resources of a topic
+	- Use multiple order statement first one ordered by resource count and second one ordered by topic name
+	-Maximum 5 records should be shown
+	- Topic with maximum resource should come first
+5. Add top post when user is not logged in
+	- Resource with maximum number of votes will be top post
+	-Only 5 posts should be shown in order of maximum vote count
+	-Use groupProperty with id of resource otherwise lots of queries will be fired
+	-Collect Resource list with resource id using getall rather then finder otherwise ordering will not be maintained
+
+6. Add Inbox feature on user/index when user is loggedin
+	- Create method getUnReadResources in user domain which takes SearchCO argument and returns unreaditems of user from ReadingItem domain
+	- The search should also work using user/index page, q parameter of SearchCO. If searchco.q is found then getUnReadResources method will search the items based on ilike of resource.description.
+	- The pagination parameter should also be used in getUnReadResources criteria query. Create readingItem/changeIsRead action which takes Long id and Boolean isRead
+	- User executeUpdate to change the isRead of readingItem with given id
+	- If value returned by executeUpdate is 0 then render error else render success
+
+7. Write integration tests where criteria and hql queris are used
+ -Create linksharing_test database for testing, which should be used in a testing environment.
