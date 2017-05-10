@@ -30,6 +30,8 @@ class LoginController {
         redirect(action: 'index')
     }
 
+    //TODO : message tag is not used for showing errors
+
     def register(String fname,String lname, String email, String pass, String confirm,String uname) {
         User user = new User(firstName: fname, lastName: lname, email: email, userName: uname,password: pass,confirmPassword: confirm)
         if(!user.save(flush:true)){

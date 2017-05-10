@@ -37,6 +37,7 @@ class User {
 
         email(unique: true, email: true, blank: false)
         userName(unique: true, blank: false)
+        // TODO : This constraint will be executed on updating user as well, how are we ensuring this is not called during updation
         password(minSize: 5, blank: false, validator: {password, obj ->
             def password2 = obj.confirmPassword
             password2 == password ? true : ['password.mismatch']

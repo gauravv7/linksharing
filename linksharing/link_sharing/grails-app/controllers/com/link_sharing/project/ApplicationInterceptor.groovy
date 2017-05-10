@@ -9,6 +9,8 @@ class ApplicationInterceptor {
 
     boolean before() {
 
+        //TODO: Simplify this using groovy truth
+
         if(session.user==null) {
             log.info("guest user")
         } else if (session.user.admin==true) {
