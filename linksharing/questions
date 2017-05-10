@@ -130,3 +130,45 @@
     18	Create static method in seriuosness which take string as parameter and returns seriousness, it should be case insensitive
     19	Write the test cases for subscription save, update, delete functionality.
     20	Use eager fetching for topic and user in subscription
+=======6_gorm_advanced=========================
+1. Add search named query for resources.
+	-Add String q, Integer max,Integer offset,String order, String sort parameter in searchCO which will be used for text search
+	-Create ResourceSearchCo which extend searchCO and add topicId long field into it to get resource specific to topic
+	-Create named query 'search' which takes ResourceSearchCO as argument and find resources specific to topic id.
+	-Update topic show action which will take ResourceSearchCO as an argument other than long id
+
+2. Add resource/search action for resource search in public topics
+	-Update ResourceSearchCO and add visibility field in it
+	-Updated Resource search named query and add condition to search topic with specified visibility
+	-Add search action in a resource controller, which will search if q parameter is set and it will set visibility of resourcesearchco to public
+
+3. Create method in resource to get rating details like totalvotes, avgscore, totalscore of a resource
+	-Create transient in resource ratingInfo and create method which will return RatingInfoVO
+	-RatingInfoVO will have fields totalVotes, averageScore, totalScore
+	-Write criteria query to get the above information.
+	-Call this method from resource show action
+
+4. Add resource show action and get trending topics also
+	- Public Topic with maximum resources is considered as a trending topic
+	- Create static method getTrendingTopics in Topic domain which will return list of TopicVO
+	- TopicVO will have id,name,visibility,count,createdBy fields
+	- Use createalias and groupproperty in criteria
+	- Use count for getting count of resources of a topic
+	- Use multiple order statement first one ordered by resource count and second one ordered by topic name
+	-Maximum 5 records should be shown
+	- Topic with maximum resource should come first
+5. Add top post when user is not logged in
+	- Resource with maximum number of votes will be top post
+	-Only 5 posts should be shown in order of maximum vote count
+	-Use groupProperty with id of resource otherwise lots of queries will be fired
+	-Collect Resource list with resource id using getall rather then finder otherwise ordering will not be maintained
+
+6. Add Inbox feature on user/index when user is loggedin
+	- Create method getUnReadResources in user domain which takes SearchCO argument and returns unreaditems of user from ReadingItem domain
+	- The search should also work using user/index page, q parameter of SearchCO. If searchco.q is found then getUnReadResources method will search the items based on ilike of resource.description.
+	- The pagination parameter should also be used in getUnReadResources criteria query. Create readingItem/changeIsRead action which takes Long id and Boolean isRead
+	- User executeUpdate to change the isRead of readingItem with given id
+	- If value returned by executeUpdate is 0 then render error else render success
+
+7. Write integration tests where criteria and hql queris are used
+ -Create linksharing_test database for testing, which should be used in a testing environment.

@@ -1,12 +1,13 @@
 package com.link_sharing.project
 
 import com.link_sharing.project.Visibility
+import com.link_sharing.project.co.ResourceSearchCO
 
 class TopicController {
 
     def index() { }
 
-    def show(Long id) {
+    def show(Long id, ResourceSearchCO co) {
         Topic topic = Topic?.read(id)
 
         if(topic) {

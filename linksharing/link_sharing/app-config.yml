@@ -5,6 +5,8 @@ dataSource:
     username: root
     dialect: org.hibernate.dialect.MySQL5InnoDBDialect
     password: temp1234
+    logSql: true
+    show_sql: true
 
 ## tO REMOVE APP NAME IN URL (Ques12) //introduction to grails
 grails:

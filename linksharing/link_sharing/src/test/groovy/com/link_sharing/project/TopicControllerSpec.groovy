@@ -1,5 +1,6 @@
 package com.link_sharing.project
 
+import com.link_sharing.project.co.ResourceSearchCO
 import com.link_sharing.project.constants.Constants
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
@@ -32,7 +33,7 @@ class TopicControllerSpec extends Specification {
 
         when:
         println("topic id :" + topic.id)
-        controller.show(topic.id)
+        controller.show(topic.id, new ResourceSearchCO())
 
         then:
         response.text == result
@@ -56,7 +57,7 @@ class TopicControllerSpec extends Specification {
         controller.session.user = user2
 
         when:
-        controller.show(topic.id)
+        controller.show(topic.id, new ResourceSearchCO())
 
         then:
         response.redirectedUrl == "/"

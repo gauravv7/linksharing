@@ -1,8 +1,20 @@
 package com.link_sharing.project
 
+import com.link_sharing.project.co.ResourceSearchCO
+import com.link_sharing.project.vo.RatingInfoVO
+
 class ResourceController {
 
     def index() { }
+
+    def show(Long id) {
+
+        Resource resource = Resource.get(id)
+        RatingInfoVO ratingInfoVO = resource.getRatingInfo()
+
+        render ratingInfoVO
+    }
+
 
     def delete(Long id) {
 
@@ -17,4 +29,15 @@ class ResourceController {
             render "Resource not found."
         }
     }
+
+    def search(ResourceSearchCO resourceSearchCO) {
+        def r
+        if (resourceSearchCO.q) {
+            resourceSearchCO.visibility = Visibility.PUBLIC
+            r = Resource.search(resourceSearchCO).list()
+        }
+
+        render r
+    }
+
 }
