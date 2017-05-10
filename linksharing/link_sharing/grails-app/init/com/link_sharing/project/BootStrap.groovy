@@ -54,6 +54,7 @@ class BootStrap {
     }
 
     void createTopics(){
+       // TODO can be simplified to !Topic.count instead of Topic.count==0
         if(Topic.count==0){
             User.list().each{
                 user-> (1..5).each {
@@ -76,6 +77,8 @@ class BootStrap {
 
                     Resource linkResource = new LinkResource(description: "topic ${topic} link", createdBy: topic
                             .createdBy, url: "https://www.google.co.in", topic: topic)
+
+                    //TODO:// Document saving could be extracted to a method instead of repeating code
 
                     if (documentResource.save(flush:true)) {
                         log.info "${documentResource} saved by ${topic.createdBy} for ${topic}"
@@ -100,8 +103,12 @@ class BootStrap {
 
     void subscribeTopics() {
 
+        //TODO: Avoid using queries in loops, Topic.list is getting fired for each user which is not  required
+
         User.list().each { User user ->
             Topic.list().each { Topic topic ->
+
+                //TODO: Could have used Subscription.findOrCreateBy instead of first finding & checking for null condition
 
                 if (Subscription.findByCreatedByAndTopic(user, topic) == null) {
                     Subscription subscription = new Subscription(createdBy: user, topic: topic, seriousness: Constants.SERIOUSNESS)
@@ -121,12 +128,16 @@ class BootStrap {
     }
 
     void createReadingItems() {
+        //TODO: Avoid using queries in loops, Topic.list is getting fired for each user which is not  required
+
 
         User.list().each { User user ->
             Topic.list().each { Topic topic ->
 
                 if (Subscription.findByCreatedByAndTopic(user, topic)) {
+                    //TODO: Could have found resources not created by user for a topic instead of checking for all resources of a topic
                     topic.resources.each { resource ->
+
 
                         if (resource.createdBy != user && !user.readingItems?.contains(resource)) {
                             ReadingItem readingItem = new ReadingItem(user: user, resource: resource, isRead: false)
