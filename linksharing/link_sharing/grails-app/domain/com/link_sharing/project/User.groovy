@@ -4,6 +4,7 @@ import com.link_sharing.project.Topic as Topic
 import com.link_sharing.project.Subscription as Subscription
 import com.link_sharing.project.Resource as Resource
 import com.link_sharing.project.ReadingItem as ReadingItem
+import com.link_sharing.project.co.SearchCO
 
 class User {
 
@@ -49,6 +50,52 @@ class User {
         active(nullable: true)
         confirmPassword(bindable: true, nullable: true, blank: true)
 
+    }
+    static List<ReadingItem> getUnReadItems(User user, SearchCO searchCO){
+        List list = []
+        if(searchCO.q==null) {
+            printf "at null"
+            return null
+        }
+
+        if (searchCO.q) {
+            list = User.createCriteria().list {
+                projections {
+                    readingItems {
+                        property('resource')
+                    }
+                }
+                readingItems {
+                    eq('isRead', false)
+                    resource {
+                        ilike('description', "%"+searchCO.q+"%")
+                    }
+                }
+
+                eq("id", user.id)
+
+                maxResults searchCO.max?: 5
+                firstResult searchCO.offset?: 0
+            }
+
+        } else {
+            list = User.createCriteria().list {
+                projections {
+                    readingItems {
+                        property('resource')
+                    }
+                }
+                readingItems {
+                    eq('isRead', false)
+                }
+                eq('id', user.id)
+                maxResults searchCO.max?: 0
+                firstResult searchCO.offset?: 5
+            }
+
+        }
+        printf list.collect().join(", ")
+        return list
     }
 
     String getFullName() {
