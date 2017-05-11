@@ -1,5 +1,6 @@
 package com.link_sharing.project
 
+//TODO: What is the purpose of value variable?????
 public enum Visibility {
     PRIVATE, PUBLIC
 

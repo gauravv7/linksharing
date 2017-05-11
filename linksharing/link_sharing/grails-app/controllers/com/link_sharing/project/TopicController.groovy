@@ -42,12 +42,14 @@ class TopicController {
             render "topic not found."
         }
     }
+//TODO :Please take care of indentation & code formatting
 
     def save(String topicName,String visibility) {
 
         if(session.user) {
 
             Topic topic = new Topic(topicName: topicName, createdBy: session.user, visibility: Visibility.checkVisibility(visibility.trim().toLowerCase()))
+            //TODO: have already assigned createdBy above, why again?
             topic.createdBy = session.user
 
             log.info("topic: ${topic}")

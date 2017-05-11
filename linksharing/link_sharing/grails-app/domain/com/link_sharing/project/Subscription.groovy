@@ -1,5 +1,6 @@
 package com.link_sharing.project
 
+//TODO Where is eager fetching of topic & user ????
 import com.link_sharing.project.Topic as Topic
 import com.link_sharing.project.User as User
 import com.link_sharing.project.Seriousness

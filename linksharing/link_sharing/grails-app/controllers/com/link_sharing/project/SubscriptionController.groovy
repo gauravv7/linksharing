@@ -26,6 +26,7 @@ class SubscriptionController {
         Subscription subscription = Subscription.findByCreatedByAndTopic(user, topic)
 
         if (subscription) {
+            //TODO: what is the purpose of this check???
             if (Seriousness.checkSeriousness(serious) != null) {
                 subscription.seriousness = Seriousness.checkSeriousness(serious)
 
@@ -43,9 +44,12 @@ class SubscriptionController {
         }
     }
 
+    //TODO :As per exercise it is supposed to take subscription id not topic
+
     def delete(Long topicId) {
         Topic topic = Topic.get(topicId)
         User user = session.user
+        //TODO : what will happen if topic & user does not exist ????
         Subscription subscription = Subscription.findByCreatedByAndTopic(user, topic)
         if (subscription) {
             subscription.delete(flush: true)
