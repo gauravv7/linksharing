@@ -3,6 +3,10 @@ package com.link_sharing.project
 class UrlMappings {
 
     static mappings = {
+        get "/login"(controller: 'login', action: 'index')
+        post "/login"(controller: 'login', action: 'loginHandler')
+        get "/logout"(controller: 'login', action: 'logout')
+
         "/$controller/$action?/$id?(.$format)?"{
             constraints {
                 // apply constraints here

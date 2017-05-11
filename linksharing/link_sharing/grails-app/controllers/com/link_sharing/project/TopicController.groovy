@@ -63,4 +63,6 @@ class TopicController {
             } // hasErrors
         } // session user
     } // save
+
+    def email() {}
 }
