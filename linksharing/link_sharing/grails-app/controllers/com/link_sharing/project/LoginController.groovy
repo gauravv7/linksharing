@@ -6,7 +6,7 @@ class LoginController {
         if (session?.user) {
             forward(controller: 'user', action: 'index')
         } else {
-            response.sendError(404)
+            render view: '/index'
         }
     }
 
