@@ -1,41 +1,23 @@
-1. Add search named query for resources.
-	-Add String q, Integer max,Integer offset,String order, String sort parameter in searchCO which will be used for text search
-	-Create ResourceSearchCo which extend searchCO and add topicId long field into it to get resource specific to topic
-	-Create named query 'search' which takes ResourceSearchCO as argument and find resources specific to topic id.
-	-Update topic show action which will take ResourceSearchCO as an argument other than long id
+1  Add application layout
+2  Application layout should use bootstrap and font awesome
+3  All the previous unused files of css, images, js should be removed and only required files should be committed
+4  Single js and single js file should be included using asset tag other css and js sould be included in main js, as per the syntex of asset pipeline
+5  All the static resource should be in assets folder, no need to add jquery as this plugin is already added in grails BuildConfig by default
+6  Update layout main.gsp according to the document mentioned in intro to linksharing, add flash message and flash error in layout by using g:if tag
+7  Add templates topic/create topic/email linkResource/create documentResource/create and include them in layout which will be opened in modal window by clicking on header links. These links and templates are added only when user is logged in
+8  Implement topic/save and linkresource/save save action. Topic, linkresource save should set errors in flash and user should redirected to the dashboard, successful save should set flash.message.
+9  Login should work from login form on home page and show top posts and recent post on home page
+10  Create templates for resource/show topic/show user/login user/register
+11  Create static method in topic to get trending topic which will be used on user dashboard as well as resource show action
+12  Add createdBy in topicVO so that createdBy can be shown in trending topic list on UI
+13  Create transient method in user domain getSubscribedTopic to get only subscribed topics of user, this method will be used in user dashboard and dropdown of linkresource create and email invite of topic
+14  Add /user/forgotPassword template which will show up on click on forgotPassword link in login form
+15  Update test cases accordingly
+16  Tags which will be used for this are layouthead, layoutbody, layouttitle, select, if, else, render, message, asset:javascript,stylesheet, actionsubmit, form, filed, each, img, paginate, uploadform
+17  Implement Topic show page
+18  Create transient method getSubscribedUsers in topic domain to get all the subscribed users
+19  Create user/_show template from user index page which take user as model and use this template to show subscribed user list in topic show page and user index page
+20  Change links on subscriptions and posts in topic/_show template to topic show action
+21  Implement search on posts header of topic show pass topic id as hidden field in form and also pass it in pagination parameters
+22  Update test cases with new changes
 
-2. Add resource/search action for resource search in public topics
-	-Update ResourceSearchCO and add visibility field in it
-	-Updated Resource search named query and add condition to search topic with specified visibility
-	-Add search action in a resource controller, which will search if q parameter is set and it will set visibility of resourcesearchco to public
-
-3. Create method in resource to get rating details like totalvotes, avgscore, totalscore of a resource
-	-Create transient in resource ratingInfo and create method which will return RatingInfoVO
-	-RatingInfoVO will have fields totalVotes, averageScore, totalScore
-	-Write criteria query to get the above information.
-	-Call this method from resource show action
-
-4. Add resource show action and get trending topics also
-	- Public Topic with maximum resources is considered as a trending topic
-	- Create static method getTrendingTopics in Topic domain which will return list of TopicVO
-	- TopicVO will have id,name,visibility,count,createdBy fields
-	- Use createalias and groupproperty in criteria
-	- Use count for getting count of resources of a topic
-	- Use multiple order statement first one ordered by resource count and second one ordered by topic name
-	-Maximum 5 records should be shown
-	- Topic with maximum resource should come first
-5. Add top post when user is not logged in
-	- Resource with maximum number of votes will be top post
-	-Only 5 posts should be shown in order of maximum vote count
-	-Use groupProperty with id of resource otherwise lots of queries will be fired
-	-Collect Resource list with resource id using getall rather then finder otherwise ordering will not be maintained
-
-6. Add Inbox feature on user/index when user is loggedin
-	- Create method getUnReadResources in user domain which takes SearchCO argument and returns unreaditems of user from ReadingItem domain
-	- The search should also work using user/index page, q parameter of SearchCO. If searchco.q is found then getUnReadResources method will search the items based on ilike of resource.description.
-	- The pagination parameter should also be used in getUnReadResources criteria query. Create readingItem/changeIsRead action which takes Long id and Boolean isRead
-	- User executeUpdate to change the isRead of readingItem with given id
-	- If value returned by executeUpdate is 0 then render error else render success
-
-7. Write integration tests where criteria and hql queris are used
- -Create linksharing_test database for testing, which should be used in a testing environment.
