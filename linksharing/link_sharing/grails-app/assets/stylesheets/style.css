@@ -30,8 +30,12 @@
 .trending-topics{
 	padding: 0;
 }
-.trending-topics > li:nth-child(2n+1){
+.trending-topics > li{
   border-bottom: 1px solid #b2b2b2;
+  margin: 10px 0;
+}
+.trending-topics > li:last-child{
+  border-bottom: none;
 }
 .trending-topic-profile-img{
 	margin: 20px 5px; border-radius: 5px;
