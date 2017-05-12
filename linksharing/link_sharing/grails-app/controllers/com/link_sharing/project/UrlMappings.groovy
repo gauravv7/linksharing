@@ -4,7 +4,7 @@ class UrlMappings {
 
     static mappings = {
         get "/login"(controller: 'login', action: 'index')
-        post "/login"(controller: 'login', action: 'loginHandler')
+        name login: "/login"(controller: 'login', action: 'loginHandler', method: 'POST')
         get "/logout"(controller: 'login', action: 'logout')
 
         "/$controller/$action?/$id?(.$format)?"{
