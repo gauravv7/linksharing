@@ -5,6 +5,7 @@ import com.link_sharing.project.Subscription as Subscription
 import com.link_sharing.project.Resource as Resource
 import com.link_sharing.project.ReadingItem as ReadingItem
 import com.link_sharing.project.co.SearchCO
+import com.link_sharing.project.vo.TopicVO
 
 class User {
 
@@ -51,6 +52,29 @@ class User {
         confirmPassword(bindable: true, nullable: true, blank: true)
 
     }
+
+
+    Map getSubscribedTopics() {
+
+        Map topicNameList = Subscription.createCriteria().list {
+            projections {
+                'topic' {
+                    property('id')
+                    property('topicName')
+                    createdBy {
+                        property('userName')
+                    }
+                }
+            }
+            eq('createdBy.id', id)
+        }.inject([:]){ result, k ->
+            result << [(k[0]): k[1]+" by "+k[2]]
+
+        }
+        log.info("${topicNameList}")
+        return topicNameList
+    }
+
     static List<ReadingItem> getUnReadItems(User user, SearchCO searchCO){
         List list = []
         if(searchCO.q==null) {

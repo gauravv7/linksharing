@@ -1,5 +1,7 @@
 package com.link_sharing.project
 
+import com.link_sharing.project.vo.TopicVO
+
 class LoginController {
 
     def index() {

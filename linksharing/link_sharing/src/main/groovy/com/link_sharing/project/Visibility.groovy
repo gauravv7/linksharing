@@ -1,7 +1,7 @@
 package com.link_sharing.project
 
 public enum Visibility {
-    PRIVATE, PUBLIC
+    PRIVATE("private"), PUBLIC("public")
 
     final String value
 

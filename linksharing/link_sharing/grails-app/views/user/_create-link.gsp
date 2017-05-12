@@ -7,31 +7,31 @@
                 <h4 class="modal-title" id="myModalLabel">Create Link</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal">
+                <g:form name="linkResourceSave" class="form-horizontal" controller="linkResource" action="save">
                     <div class="form-group">
                         <label for="link" class="col-sm-2 control-label">Link</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="link">
+                            <g:field type="url" class="form-control col-sm-8" name="url"/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="desc" class="col-sm-2 control-label">Description</label>
+                        <label for="description" class="col-sm-2 control-label">Description</label>
                         <div class="col-sm-10">
-                            <textarea class="form-control" id="desc"></textarea>
+                            <g:textArea name="description" class="col-sm-8 form-control"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="topic" class="col-sm-2 control-label">Topic</label>
                         <div class="col-sm-10">
-                            <input type="topic" class="form-control" id="topic">
+                            <g:select class="btn dropdown-toggle col-sm-8 form-control" name="topic" from="${session.user?.getSubscribedTopics()}" optionKey="key" optionValue="value" />
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
-                            <button type="submit" class="btn btn-default">Share</button>
+                            <button type="submit" class="btn btn-default">Save</button>
                         </div>
                     </div>
-                </form>
+                </g:form>
             </div>
         </div>
     </div>

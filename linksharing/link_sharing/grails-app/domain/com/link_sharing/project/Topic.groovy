@@ -67,4 +67,13 @@ class Topic {
         }
         return trendingTopics
     }
+
+    def subscribedUsers() {
+        return Subscription.createCriteria().list {
+            projections {
+                property('createdBy')
+            }
+            eq('topic', this)
+        }
+    }
 }

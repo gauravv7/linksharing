@@ -1,3 +1,4 @@
+<%! import com.link_sharing.project.Visibility %>
 <!DOCTYPE html>
 <html>
   <head>
