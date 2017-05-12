@@ -13,10 +13,10 @@ class TopicController {
 
         if(topic) {
             if (topic.visibility == Visibility.PUBLIC) {
-                render "success public"
+                render view: 'show'
             } else if (topic.visibility == Visibility.PRIVATE) {
                 if (Subscription?.findByCreatedByAndTopic(session.user, topic)) {
-                    render "success private"
+                    render view: 'show'
                 }
                 else {
                     flash.error = "Cannot access private topic"

@@ -43,3 +43,8 @@
 .inbox .panel-body > .row:last-child{
 	border-bottom: none;
 }
+
+.row-noMargin{
+    margin-left: 0;
+    margin-right: 0;
+}

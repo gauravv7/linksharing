@@ -225,7 +225,7 @@
                           <li><a class="text-right" style="display: block">Download</a</li>
                           <li><a class="text-right" style="display: block">view full site</a</li>
                           <li><a class="text-right" style="display: block">Mark as Read</a></li>
-                          <li><a class="text-right" style="display: block">view post</a></li>
+                          <li><a class="text-right" style="display: block">view resource</a></li>
                         </ul>
                       </div>
                     </div>
@@ -262,7 +262,7 @@
                           <li><a class="text-right" style="display: block">Download</a</li>
                           <li><a class="text-right" style="display: block">view full site</a</li>
                           <li><a class="text-right" style="display: block">Mark as Read</a></li>
-                          <li><a class="text-right" style="display: block">view post</a></li>
+                          <li><a class="text-right" style="display: block">view resource</a></li>
                         </ul>
                       </div>
                     </div>
