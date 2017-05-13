@@ -37,10 +37,16 @@
 
     <div class="container-fluid">
         <g:if test="${flash.error}">
-            <div class="alert alert-danger"><p>${flash.error}</p></div>
+            <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <p>${flash.error}</p>
+            </div>
         </g:if>
         <g:if test="${flash.message}">
-            <div class="alert alert-success" style="display: block"><p>${flash.message}</p></div>
+            <div class="alert alert-success" style="display: block">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <p>${flash.message}</p>
+            </div>
         </g:if>
     </div>
 
