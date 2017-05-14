@@ -20,8 +20,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
-                            <button type="submit" class="btn btn-default">Forgot Password</button>
-
+                            <a href="${createLink(controller: 'login', action: 'forgotPassword')}">Forgot Password?</a>
                             <button type="submit" class="btn btn-default">update</button>
                         </div>
                     </div>
