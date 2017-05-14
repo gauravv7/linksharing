@@ -75,6 +75,30 @@ class User {
         return topicNameList
     }
 
+    Map getPrivatelySubscribedTopics() {
+
+        Map topicNameList = Subscription.createCriteria().list {
+            projections {
+                'topic' {
+                    property('id')
+                    property('topicName')
+                    createdBy {
+                        property('userName')
+                    }
+                }
+            }
+            topic{
+                eq('visibility', Visibility.PRIVATE)
+            }
+            eq('createdBy.id', id)
+        }.inject([:]){ result, k ->
+            result << [(k[0]): k[1]+" by "+k[2]]
+
+        }
+        log.info("${topicNameList}")
+        return topicNameList
+    }
+
     static List<ReadingItem> getUnReadItems(User user, SearchCO searchCO){
         List list = []
         if(searchCO.q==null) {

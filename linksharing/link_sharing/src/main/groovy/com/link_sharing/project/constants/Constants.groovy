@@ -10,7 +10,6 @@ class Constants {
     static final String PASSWORD_ADMIN  = "admin123456"
     static final Seriousness SERIOUSNESS = Seriousness.VERY_SERIOUS
     static final Integer RATING = 5
-
     public static final String LOC_DOCUMENT_RESOURCE = "/opt/assets/documentResource"
-
+    static final String SALT = "someSalt"
 }
