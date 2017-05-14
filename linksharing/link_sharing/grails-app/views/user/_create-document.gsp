@@ -7,23 +7,23 @@
                 <h4 class="modal-title" id="myModalLabel">Create Document</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal">
+                <g:uploadForm class="form-horizontal" controller="documentResource" action="save" >
                     <div class="form-group">
                         <label for="document" class="col-sm-2 control-label">Document</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="document">
+                            <g:field type="file" class="form-control" name="document" />
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="desc" class="col-sm-2 control-label">Description</label>
+                        <label for="description" class="col-sm-2 control-label">Description</label>
                         <div class="col-sm-10">
-                            <textarea class="form-control" id="desc"></textarea>
+                            <g:textArea name="description" class="col-sm-8 form-control"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="topic" class="col-sm-2 control-label">Topic</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="topic">
+                            <g:select class="btn dropdown-toggle col-sm-8 form-control" name="topic" from="${session.user?.getSubscribedTopics()}" optionKey="key" optionValue="value" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -31,7 +31,7 @@
                             <button type="submit" class="btn btn-default">Share</button>
                         </div>
                     </div>
-                </form>
+                </g:uploadForm>
             </div>
         </div>
     </div>
