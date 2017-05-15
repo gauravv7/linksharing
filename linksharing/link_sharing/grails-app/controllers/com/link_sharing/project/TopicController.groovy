@@ -31,18 +31,24 @@ class TopicController {
         }
     }
 
-    def delete(Long id) {
-
-        Topic topic = Topic.load(id)
-
-        if(topic) {
-            log.info("topic ${topic}")
-            topic.delete(flush:true)
-            render "success"
+    def remove(Long topicId) {
+        if(session.user){
+            Topic topic = Topic.load(topicId)
+            if (topic) {
+                log.info "topic createdBy id $topic.createdBy.id"
+                log.info "user session id $session.user.id"
+                if(topic.createdBy.id == session.user.id){
+                    topic.delete(flush: true)
+                    flash.message = "Topic deleted"
+                }
+            } else {
+                flash.error = "Topic not found"
+            }
+        } else{
+            flash.error = "user not logged in"
         }
-        else {
-            render "topic not found."
-        }
+
+        redirect(url: request.getHeader("referer"))
     }
 
     def save(TopicCO topicCO) {
@@ -67,4 +73,21 @@ class TopicController {
     } // save
 
     def email() {}
+
+    def updateVisibility(Long topicId, String visibility){
+        log.info "$topicId"
+        log.info "$visibility"
+        if(session.user){
+            Topic topic = Topic.load(topicId)
+            topic.visibility = Visibility.checkVisibility(visibility)
+            if(topic.save(flush: true)){
+                flash.message = "visibility updated"
+            } else{
+                flash.error = topic.errors.allErrors.join(", ")
+            }
+        } else{
+            flash.error = "user not logged in"
+        }
+        redirect(url: request.getHeader("referer"))
+    }
 }

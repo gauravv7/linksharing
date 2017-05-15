@@ -19,3 +19,15 @@ if (typeof jQuery !== 'undefined') {
         });
     })(jQuery);
 }
+
+$(document).ready(function(){
+    $('#sendInvite').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget) // Button that triggered the modal
+      var tid = parseInt(button.data('topicid')) // Extract info from data-* attributes
+
+      var modal = $(this)
+      if(tid){
+        modal.find('.modal-body select#topic').val(tid)
+      }
+    })
+})

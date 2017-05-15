@@ -2,9 +2,9 @@ package com.link_sharing.project
 
 enum Seriousness {
 
-    SERIOUS,
-    VERY_SERIOUS,
-    CASUAL
+    SERIOUS("serious"),
+    VERY_SERIOUS("very serious"),
+    CASUAL("casual")
 
     final String value
 

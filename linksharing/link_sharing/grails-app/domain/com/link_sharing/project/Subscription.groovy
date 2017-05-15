@@ -14,6 +14,7 @@ class Subscription {
 
     static mapping = {
         seriousness defaultValue: Seriousness.SERIOUS
+        topic cascade: 'save-update'
     }
 
     static constraints = {
@@ -24,6 +25,17 @@ class Subscription {
 
     static belongsTo = [createdBy:User,
                         topic:Topic]
+
+    Integer getSubsciptionCount(){
+        def s = Subscription.createCriteria()
+
+        def subscribers = s.count {
+            eq("topic", this.topic)
+
+        }
+
+        return subscribers
+    }
 
     String toString() {
 

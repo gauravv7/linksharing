@@ -11,9 +11,18 @@ class UserController {
 
     def index(SearchCO searchCO) {
         List l = User.getUnReadItems(session.user, searchCO)
+        log.info("user id is from uc: $session.user.id")
         log.info("search items\n$l")
-            log.info("search items\n${session.user?.getSubscribedTopics()}")
-        render view: 'dashboard'
+        log.info("sbs topics \n${session.user?.getSubscribedTopics()}")
+        log.info("user sbs \n${session.user?.userSubscriptions()}")
+        log.info("user sbs size \n${session.user?.userSubscriptions().size()}")
+        log.info("user trdntopic \n${Topic.getTrendingTopics()}")
+        render view: 'dashboard', model: [
+                trendingTopics: Topic.getTrendingTopics(),
+                listVisibility: Visibility.values().toList(),
+                userSubscriptions: session.user?.userSubscriptions(),
+                subscribedTopics: session.user?.getSubscribedTopics()
+        ]
 
     }
 

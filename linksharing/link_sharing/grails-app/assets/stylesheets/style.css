@@ -52,3 +52,11 @@
     margin-left: 0;
     margin-right: 0;
 }
+.subscription-select{
+    font-size: 12px;
+    min-width: 85px;
+}
+.subscription-invite-btn{
+    font-size: 22px;
+    vertical-align: text-bottom;
+}

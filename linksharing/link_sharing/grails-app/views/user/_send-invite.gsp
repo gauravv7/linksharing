@@ -17,7 +17,7 @@
                     <div class="form-group">
                         <label for="topic" class="col-sm-2 control-label">Topic</label>
                         <div class="col-sm-10">
-                            <g:select class="btn dropdown-toggle col-sm-8 form-control" name="topic" from="${session.user?.getPrivatelySubscribedTopics()}" optionKey="key" optionValue="value" />
+                            <g:select class="btn dropdown-toggle col-sm-8 form-control" id="topic" name="topic" from="${session.user?.getPrivatelySubscribedTopics()}" optionKey="key" optionValue="value" />
                         </div>
                     </div>
                     <div class="form-group">

@@ -6,6 +6,7 @@ import com.link_sharing.project.Resource as Resource
 import com.link_sharing.project.ReadingItem as ReadingItem
 import com.link_sharing.project.co.SearchCO
 import com.link_sharing.project.vo.TopicVO
+import org.hibernate.criterion.CriteriaSpecification
 
 class User {
 
@@ -54,6 +55,31 @@ class User {
     }
 
 
+    def userSubscriptions() {
+
+        return Subscription.createCriteria().list() {
+            resultTransformer CriteriaSpecification.ALIAS_TO_ENTITY_MAP
+            projections {
+                groupProperty('id')
+                property('id', 'id')
+                property('seriousness', 'topicSeriousness')
+                'topic' {
+                    property('id', 'topicID')
+                    property('createdBy.id', 'topicCreatedBy')
+                    property('topicName', 'topicName')
+                    property('visibility', 'topicVisibility')
+                    count('resources','posts')
+                }
+                'createdBy' {
+                    property('id', 'userID')
+                    property('userName', 'userName')
+                    property('lastName', 'ln')
+                    property('firstName', 'fn')
+                }
+            }
+        }
+    }
+
     Map getSubscribedTopics() {
 
         Map topicNameList = Subscription.createCriteria().list {
@@ -65,8 +91,10 @@ class User {
                         property('userName')
                     }
                 }
+                'createdBy'{
+                    eq('id', id)
+                }
             }
-            eq('createdBy.id', id)
         }.inject([:]){ result, k ->
             result << [(k[0]): k[1]+" by "+k[2]]
 
@@ -85,12 +113,12 @@ class User {
                     createdBy {
                         property('userName')
                     }
+                    eq('visibility', Visibility.PRIVATE)
+                }
+                'createdBy'{
+                    eq('id', id)
                 }
             }
-            topic{
-                eq('visibility', Visibility.PRIVATE)
-            }
-            eq('createdBy.id', id)
         }.inject([:]){ result, k ->
             result << [(k[0]): k[1]+" by "+k[2]]
 
