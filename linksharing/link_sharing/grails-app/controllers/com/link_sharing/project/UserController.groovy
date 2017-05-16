@@ -5,6 +5,9 @@ import com.link_sharing.project.co.SearchCO
 import com.link_sharing.project.constants.Constants
 import com.link_sharing.project.utils.EncryptUtils
 
+import javax.imageio.ImageIO
+import java.awt.image.BufferedImage
+
 class UserController {
 
     def mailService
@@ -92,4 +95,23 @@ class UserController {
         redirect(url: request.getHeader("referer"))
     }
 
+    def getImage(){
+        def path = params.filepath
+        //returns an image to display
+        File f = new File(Constants.LOC_PHOTO_RESOURCE +"/"+path)
+        BufferedImage originalImage = ImageIO.read(f);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        def fileext = path.substring(path.indexOf(".")+1, path.length())
+
+        ImageIO.write( originalImage, fileext, baos );
+        baos.flush();
+
+        byte[] img = baos.toByteArray();
+        baos.close();
+        response.setHeader('Content-length', img.length.toString())
+        response.contentType = "image/"+fileext // or the appropriate image content type
+        response.outputStream << img
+        response.outputStream.flush()
+    }
 }

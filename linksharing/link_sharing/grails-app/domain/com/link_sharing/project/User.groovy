@@ -73,6 +73,7 @@ class User {
                     property('userName', 'userName')
                     property('lastName', 'ln')
                     property('firstName', 'fn')
+                    property('photo', 'pic')
                 }
             }
         }

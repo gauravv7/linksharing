@@ -14,4 +14,5 @@ class Constants {
     public static final String LOC_PHOTO_RESOURCE = "/opt/assets/photos"
     static final String SALT = "someSalt"
     static final String DOCUMENT_CONTENT_TYPE = "application/pdf"
+    static final String DEFAULT_USER_PHOTO="default-user.png"
 }

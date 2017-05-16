@@ -1,5 +1,7 @@
 package com.link_sharing.project
 
+import com.link_sharing.project.constants.Constants
+
 class DashboardTagLib {
 
     static namespace = "dsh"
@@ -101,6 +103,16 @@ class DashboardTagLib {
             if(rid){
                 out << "<a class=\"text-right\" style=\"display: block\" href=\"${createLink(controller: 'resource', action: 'show', params: [id: rid])}\">view resource</a>"
             }
+    }
+
+    def showProfilePic = {
+        attrs, body ->
+            String sc = attrs.styleClasses
+            String filepath = attrs.filepath.trim()
+            if(filepath.equals("null")){
+                filepath = Constants.DEFAULT_USER_PHOTO
+            }
+            out << "<img class=\"$sc\" style=\"margin: 5px 0; border-radius: 5px;\" src=\"${createLink(controller: 'user', action: 'getImage', params: [filepath: filepath ])}\"/>"
     }
 
 }
