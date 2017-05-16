@@ -65,11 +65,13 @@ class UserController {
         if(invitation.validate()){
             String text1 = createLink(controller: 'user', action: 'invite', params: [code: hashed], absolute: true)
             log.info text1
-            mailService.sendMail {
-                to inviteCO.email
-                from "csi.online2016@gmail.com"
-                subject 'linksharing: invitation'
-                text text1
+            async{
+                mailService.sendMail {
+                    to inviteCO.email
+                    from "csi.online2016@gmail.com"
+                    subject 'linksharing: invitation'
+                    text text1
+                }
             }
             invitation.save(flush: true)
             flash.message = "Invite sent successsfully"

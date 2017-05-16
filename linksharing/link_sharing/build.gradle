@@ -48,6 +48,8 @@ dependencies {
     testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
     compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.6'
     compile 'org.grails.plugins:mail:2.0.0.RC6'
+    compile 'org.grails.plugins:grails-executor:0.4'
+
 }
 
 bootRun {

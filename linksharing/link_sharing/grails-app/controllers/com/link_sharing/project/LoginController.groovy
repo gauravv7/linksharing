@@ -110,11 +110,13 @@ class LoginController {
                 if(rpass.validate()){
                     String text1 = createLink(controller: 'login', action: 'reset', params: [code: hashed], absolute: true)
                     log.info text1
-                    mailService.sendMail {
-                        to email
-                        from "csi.online2016@gmail.com"
-                        subject 'linksharing: reset password'
-                        text text1
+                    runAsync {
+                        mailService.sendMail {
+                            to email
+                            from "csi.online2016@gmail.com"
+                            subject 'linksharing: reset password'
+                            text text1
+                        }
                     }
                     rpass.save(flush: true)
                     flash.message = "a mail has been sent to the provided email Id containing the link to reset password"
