@@ -24,7 +24,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="#">Link Sharing</a>
+              <a class="navbar-brand" href="/login">Link Sharing</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
