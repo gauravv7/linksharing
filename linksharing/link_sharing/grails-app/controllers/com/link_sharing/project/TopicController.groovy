@@ -12,8 +12,14 @@ class TopicController {
         Topic topic = Topic?.read(id)
 
         if(topic) {
+            List subscribedUsers = topic.subscribedUsers()
+            List posts = Resource.findAllByTopicAndCreatedBy(topic, topic.createdBy)
+            log.info "subscribedUsers: $subscribedUsers"
+            Subscription seriousness = Subscription.findByTopicAndCreatedBy(topic, topic.createdBy)
             if (topic.visibility == Visibility.PUBLIC) {
-                render view: 'show'
+                render view: 'show', model: [
+                        subscribedUsers: subscribedUsers, topic: topic, posts: posts, subscription: seriousness
+                ]
             } else if (topic.visibility == Visibility.PRIVATE) {
                 if (Subscription?.findByCreatedByAndTopic(session.user, topic)) {
                     render view: 'show'

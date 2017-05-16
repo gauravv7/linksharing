@@ -1,22 +1,22 @@
 <div class="row">
     <div class="col-sm-4">
-        <dsh:showProfilePic filepath="$item.createdBy.photo" styleClasses="trending-topics-profile-img"></dsh:showProfilePic>
+        <dsh:showProfilePic filepath="$item.photo" styleClasses="trending-topics-profile-img"></dsh:showProfilePic>
     </div>
     <div class="col-sm-8">
         <div class="row">
             <div class="col-sm-12">
-                <h3>${item.createdBy.getFullName()}</h3>
-                <p>@${item.createdBy.userName}</p>
+                <h3>${item.firstName}</h3>
+                <p>@${item.userName}</p>
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
                 <h4>Subsciption</h4>
-                <h5><dsh:subscriptionCount topicId="${item.topicID}"></dsh:subscriptionCount></h5>
+                <h5><dsh:subscriptionCount topicId="${topicid}"></dsh:subscriptionCount></h5>
             </div>
             <div class="col-md-6">
                 <h4>Topics</h4>
-                <h5><dsh:subscriptionCount topicId="${item.topicID}"></dsh:subscriptionCount></h5>
+                <h5><dsh:subscriptionCount topicId="${topicid}"></dsh:subscriptionCount></h5>
             </div>
         </div>
     </div>

@@ -70,7 +70,20 @@ class DashboardTagLib {
 
     def markAsReadUnRead = {
         attrs, body ->
-            ReadingItem item = attrs.item
+            ReadingItem item = (attrs.item instanceof ReadingItem)? attrs.item: ReadingItem.findByResourceAndUser(attrs.item, User.load(attrs.item.createdBy.id))
+            log.info "mark as read unread $item"
+            if(item){
+                if(item.isRead){
+                    out << link(controller: 'readingItem', action: 'changeIsRead', params: [id: item.id]) {'Mark as unread'}
+                } else {
+                    out << link(controller: 'readingItem', action: 'changeIsRead', params: [id: item.id]) {'Mark as read'}
+                }
+            }
+    }
+
+    def markAsReadUnReadForTopicShow = {
+        attrs, body ->
+            ReadingItem item = ReadingItem.findByResourceAndUser(attrs.item, User.load(attrs.item.createdBy.id))
             log.info "mark as read unread $item"
             if(item){
                 if(item.isRead){
