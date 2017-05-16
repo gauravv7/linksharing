@@ -50,16 +50,6 @@ class ResourceController {
         redirect(action: 'show', id: id)
     }
 
-    def search(ResourceSearchCO resourceSearchCO) {
-        def r
-        if (resourceSearchCO.q) {
-            resourceSearchCO.visibility = Visibility.PUBLIC
-            r = Resource.search(resourceSearchCO).list()
-        }
-
-        render r
-    }
-
     def updateRating(Long id, Integer score) {
 
         String msg = ""
@@ -112,6 +102,25 @@ class ResourceController {
         }
 
         redirect(url: request.getHeader("referer"))
+    }
+
+    def search(ResourceSearchCO co) {
+        List searchPosts = []
+        if (co.q && !co.topicID) {
+            co.visibility = Visibility.PUBLIC
+        }
+        List<Resource> resources = Resource.search(co).list()
+
+        resources?.each {
+            searchPosts.add(ReadingItem.findByResource(it))
+        }
+
+        render(view: 'search', model: [
+                topPosts : null,
+                trendingTopics: null,
+                posts : searchPosts
+        ])
+
     }
 
 }

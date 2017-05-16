@@ -29,11 +29,14 @@
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse pull-right" id="bs-example-navbar-collapse-1">
-                <form class="navbar-form navbar-left">
+                <g:form class="navbar-form navbar-left" method="get" controller="resource" action="search">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search">
+                        <input type="text" class="form-control" name="q" placeholder="Search">
                     </div>
-                </form>
+                    <g:hiddenField name="visibility" id="visibility" class="visibility"
+                                   value="PUBLIC"/>
+                </g:form>
+
                 <ul class="nav navbar-nav navbar-right">
                     <g:if test="${session.user}">
                         <g:pageProperty name="page.nav" />

@@ -6,13 +6,6 @@
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico" />
 </head>
 <body>
-<content tag="nav">
-    <form class="navbar-form navbar-left">
-        <div class="form-group">
-            <input type="text" class="form-control" placeholder="Search">
-        </div>
-    </form>
-</content>
 
 <div class="container-fluid">
     <div class="row" style="padding: 2px 15px;">

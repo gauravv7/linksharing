@@ -6,24 +6,12 @@
 <body>
 
 <content tag="nav">
-    <form class="navbar-form navbar-left">
-        <div class="form-group">
-            <input type="text" class="form-control" placeholder="Search">
-        </div>
-    </form>
-    <ul class="nav navbar-nav navbar-right">
+
         <li><a href="" data-toggle="modal" data-target="#createTopic"><span class="glyphicon glyphicon-comment"></span></a></li>
         <li><a href="" data-toggle="modal" data-target="#sendInvite"><span class="glyphicon glyphicon-envelope"></span></a></li>
         <li><a href="" data-toggle="modal" data-target="#createLink"><span class="glyphicon glyphicon-link"></span></a></li>
         <li><a href="" data-toggle="modal" data-target="#createDocument"><span class="glyphicon glyphicon-file"></span></a></li>
-        <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>UserName <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                <li><a href="#">Profile</a></li>
-                <li><a href="#">Logout</a></li>
-            </ul>
-        </li>
-    </ul>
+
 </content>
 
 <div class="container-fluid">
@@ -33,7 +21,7 @@
                 <div class="col-md-12 topic-box">
                     <div class="row">
                         <div class="col-sm-3">
-                            <img src="http://lorempixel.com/130/135/people/" alt="" class="topic-profile-image">
+                            <img src="http://lorempixel.com/130/135/city/" alt="" class="topic-profile-image">
                         </div>
                         <div class="col-sm-9">
                             <div class="row">
@@ -91,7 +79,7 @@
                                 <li>
                                     <div class="row">
                                         <div class="col-sm-4">
-                                            <img src="http://lorempixel.com/120/125/people/" alt="" class="trending-topics-profile-img">
+                                            <img src="http://lorempixel.com/120/125/city/" alt="" class="trending-topics-profile-img">
                                         </div>
                                         <div class="col-sm-8">
                                             <div class="row">
@@ -116,7 +104,7 @@
                                 <li>
                                     <div class="row">
                                         <div class="col-sm-4">
-                                            <img src="http://lorempixel.com/120/125/people/" alt="" style="margin: 20px 5px; border-radius: 5px;">
+                                            <img src="http://lorempixel.com/120/125/city/" alt="" style="margin: 20px 5px; border-radius: 5px;">
                                         </div>
                                         <div class="col-sm-8">
                                             <div class="row">
