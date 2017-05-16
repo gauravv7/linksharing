@@ -17,9 +17,13 @@ class LoginController {
             forward(controller: 'user', action: 'index')
         } else {
             List recentShares = Resource.recentPosts()
+            List topPosts = Resource.getTopPosts()
+
             log.info "recentShares: $recentShares"
+            log.info "postts: $topPosts"
             render view: '/index', model:[
-                    recentShares: recentShares
+                    recentShares: recentShares,
+                    topPosts: topPosts
             ]
         }
     }
