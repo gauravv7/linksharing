@@ -59,25 +59,31 @@ class UserController {
     def sendInvite(InviteCO inviteCO) {
         log.info("$inviteCO")
 
-        String hashed = EncryptUtils.encryptSHA256("${session.user}${inviteCO.email}${inviteCO.topic}${Constants.SALT}" as String)
+        if(User.findByEmail(inviteCO.email)){
+            String hashed = EncryptUtils.encryptSHA256("${session.user}${inviteCO.email}${inviteCO.topic}${Constants.SALT}" as String)
 
-        Invitation invitation = new Invitation(invitee: session.user, invited: inviteCO.email, topic: inviteCO.topic, urlHash: hashed)
-        if(invitation.validate()){
-            String text1 = createLink(controller: 'user', action: 'invite', params: [code: hashed], absolute: true)
-            log.info text1
-            async{
-                mailService.sendMail {
-                    to inviteCO.email
-                    from "csi.online2016@gmail.com"
-                    subject 'linksharing: invitation'
-                    text text1
+            Invitation invitation = new Invitation(invitee: session.user, invited: inviteCO.email, topic: inviteCO.topic, urlHash: hashed)
+            if(invitation.validate()){
+                String text1 = createLink(controller: 'user', action: 'invite', params: [code: hashed], absolute: true)
+                log.info text1
+                async{
+                    mailService.sendMail {
+                        to inviteCO.email
+                        from "csi.online2016@gmail.com"
+                        subject 'linksharing: invitation'
+                        text text1
+                    }
                 }
+                invitation.save(flush: true)
+                flash.message = "Invite sent successfully"
+            } else{
+                flash.error = invitation.errors.allErrors.join(', ')
             }
-            invitation.save(flush: true)
-            flash.message = "Invite sent successsfully"
         } else{
-            flash.error = invitation.errors.allErrors.join(', ')
+            flash.error = "invitation not sent, user doesn't exists with given email"
         }
+
+
         redirect(url: request.getHeader("referer"))
     }
 
