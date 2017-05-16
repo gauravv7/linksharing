@@ -14,12 +14,13 @@ class UserController {
 
     def index(SearchCO searchCO) {
         List unreadItems = ReadingItem.findAllByUserAndIsRead(session.user, false, [sort: "dateCreated", order: "desc"])
+        List tt = Topic.getTrendingTopics()
         log.info("user id is from uc: $session.user.id")
         log.info("unread items\n$unreadItems")
         log.info("sbs topics \n${session.user?.getSubscribedTopics()}")
         log.info("user sbs \n${session.user?.userSubscriptions()}")
         log.info("user sbs size \n${session.user?.userSubscriptions().size()}")
-        log.info("user trdntopic \n${Topic.getTrendingTopics()}")
+        log.info("user trdntopic \n${tt}")
         def subscriptionCount = Subscription.countByCreatedBy(session.user)
         def topicCount = Topic.countByCreatedBy(session.user)
         render view: 'dashboard', model: [
@@ -29,6 +30,7 @@ class UserController {
                 userSubscriptions: session.user?.userSubscriptions(),
                 subscriptions: subscriptionCount,
                 topicCount: topicCount,
+                trendingTopics: tt,
                 subscribedTopics: session.user?.getSubscribedTopics()
         ]
 

@@ -76,56 +76,11 @@
                         </div>
                         <div class="panel-body">
                             <ul class="list-unstyled trending-topics">
-                                <li>
-                                    <div class="row">
-                                        <div class="col-sm-4">
-                                            <img src="http://lorempixel.com/120/125/city/" alt="" class="trending-topics-profile-img">
-                                        </div>
-                                        <div class="col-sm-8">
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    <h3>FName LName</h3>
-                                                    <p>@firstName</p>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <h4>Subsciption</h4>
-                                                    <h5>50</h5>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <h4>Topics</h4>
-                                                    <h5>30</h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="row">
-                                        <div class="col-sm-4">
-                                            <img src="http://lorempixel.com/120/125/city/" alt="" style="margin: 20px 5px; border-radius: 5px;">
-                                        </div>
-                                        <div class="col-sm-8">
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    <h3>FName LName</h3>
-                                                    <p>@firstName</p>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <h4>Subsciption</h4>
-                                                    <h5>50</h5>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <h4>Topics</h4>
-                                                    <h5>30</h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
+                                <g:each in="${trendingTopics}" var="item">
+                                    <li>
+                                        <g:render template="/topic/trendingTopics" model="[item: item]"></g:render>
+                                    </li>
+                                </g:each>
                             </ul>
                         </div>
                     </div>

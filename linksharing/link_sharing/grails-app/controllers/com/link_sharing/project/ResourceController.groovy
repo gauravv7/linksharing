@@ -11,6 +11,7 @@ class ResourceController {
 
         Resource resource = Resource.get(id)
         RatingInfoVO ratingInfoVO = null
+        List tt = Topic.getTrendingTopics()
         if(resource){
             log.info "here in resource"
             ratingInfoVO = resource.getRatingInfo()
@@ -21,6 +22,7 @@ class ResourceController {
         log.info "ratingInfo $ratingInfoVO"
         render view: 'show', model: [
                 resource: resource,
+                trendingTopics: tt,
                 ratingInfo: ratingInfoVO
         ]
     }
@@ -110,14 +112,14 @@ class ResourceController {
             co.visibility = Visibility.PUBLIC
         }
         List<Resource> resources = Resource.search(co).list()
-
+        List tt = Topic.getTrendingTopics()
         resources?.each {
             searchPosts.add(ReadingItem.findByResource(it))
         }
 
         render(view: 'search', model: [
                 topPosts : null,
-                trendingTopics: null,
+                trendingTopics: tt,
                 posts : searchPosts
         ])
 
