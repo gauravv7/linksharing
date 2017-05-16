@@ -15,7 +15,7 @@
                         <g:each in="${recentShares}" var="rs">
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <img src="http://lorempixel.com/130/135/city/" alt="" style="margin: 5px; border-radius: 5px;">
+                                    <dsh:showProfilePic filepath="$rs.photo" styleClasses="trending-topics-profile-img"></dsh:showProfilePic>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="row">
@@ -61,7 +61,7 @@
                         <g:each in="${topPosts}" var="post">
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <img src="http://lorempixel.com/130/135/city/" alt="" style="margin: 5px; border-radius: 5px;">
+                                    <dsh:showProfilePic filepath="$post.photo" styleClasses="trending-topics-profile-img"></dsh:showProfilePic>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="row">

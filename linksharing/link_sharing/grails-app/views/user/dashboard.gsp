@@ -23,7 +23,7 @@
           <div class="row" style="border: 1px solid #b2b2b2  ; border-radius: 5px; margin: 0">
             <div class="col-sm-4">
                 <!--<img style="margin: 5px 0; border-radius: 5px;" src="${createLink(controller: 'user', action: 'getImage', params: [filepath: session.user.photo?: 'default-user.png' ])}"/>-->
-                <dsh:showProfilePic filepath="$session.user.photo"></dsh:showProfilePic>
+                <dsh:showProfilePic filepath="$session.user.photo" styleClasses="trending-topics-profile-img"></dsh:showProfilePic>
             </div>
             <div class="col-sm-8">
               <div class="row">

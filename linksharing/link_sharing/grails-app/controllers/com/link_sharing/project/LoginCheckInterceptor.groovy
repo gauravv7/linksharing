@@ -7,6 +7,9 @@ class LoginCheckInterceptor {
         matchAll().excludes(controller:"login")
     }
     boolean before() {
+        if(controllerName.equals("user") && actionName.equals("getImage")){
+            return true
+        }
         if(controllerName.equals("resource") && actionName.equals("show") && params.id){
             if(Resource.get(params.id).topic.visibility==Visibility.PUBLIC){
                 return true
