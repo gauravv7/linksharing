@@ -2,7 +2,6 @@ package com.link_sharing.project
 
 import com.link_sharing.project.co.InviteCO
 import com.link_sharing.project.co.SearchCO
-import com.link_sharing.project.co.UserCO
 import com.link_sharing.project.constants.Constants
 import com.link_sharing.project.utils.EncryptUtils
 
@@ -58,26 +57,32 @@ class UserController {
 
     def sendInvite(InviteCO inviteCO) {
         log.info("$inviteCO")
+        User user = User.findByEmail(inviteCO.email)
+        if(user){
+            Subscription subscription = Subscription.findByCreatedByAndTopic(user, Topic.load(inviteCO.topic))
+            if(!subscription){
 
-        if(User.findByEmail(inviteCO.email)){
-            String hashed = EncryptUtils.encryptSHA256("${session.user}${inviteCO.email}${inviteCO.topic}${Constants.SALT}" as String)
+                String hashed = EncryptUtils.encryptSHA256("${session.user}${inviteCO.email}${inviteCO.topic}${Constants.SALT}" as String)
 
-            Invitation invitation = new Invitation(invitee: session.user, invited: inviteCO.email, topic: inviteCO.topic, urlHash: hashed)
-            if(invitation.validate()){
-                String text1 = createLink(controller: 'user', action: 'invite', params: [code: hashed], absolute: true)
-                log.info text1
-                async{
-                    mailService.sendMail {
-                        to inviteCO.email
-                        from "csi.online2016@gmail.com"
-                        subject 'linksharing: invitation'
-                        text text1
+                Invitation invitation = new Invitation(invitee: session.user, invited: inviteCO.email, topic: inviteCO.topic, urlHash: hashed)
+                if(invitation.validate()){
+                    String text1 = createLink(controller: 'user', action: 'invite', params: [code: hashed], absolute: true)
+                    log.info text1
+                    runAsync {
+                        mailService.sendMail {
+                            to inviteCO.email
+                            from "csi.online2016@gmail.com"
+                            subject 'linksharing: invitation'
+                            text text1
+                        }
                     }
+                    invitation.save(flush: true)
+                    flash.message = "Invite sent successfully"
+                } else{
+                    flash.error = invitation.errors.allErrors.join(', ')
                 }
-                invitation.save(flush: true)
-                flash.message = "Invite sent successfully"
             } else{
-                flash.error = invitation.errors.allErrors.join(', ')
+                flash.error = "user already subscribed to that topic"
             }
         } else{
             flash.error = "invitation not sent, user doesn't exists with given email"
