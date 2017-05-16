@@ -28,9 +28,11 @@
             </div>
             <div class="col-sm-8">
                 <ul class="list-inline text-right">
-                    <li><dsh:showInboxLinkOrDownload resource="${item.resource}"></dsh:showInboxLinkOrDownload></li>
-                    <li><dsh:markAsReadUnRead item="${item}"></dsh:markAsReadUnRead></li>
-                    <li><a class="text-right" style="display: block" href="${createLink(controller: 'resource', action: 'show', params: [id: item.resource.id])}">view resource</a></li>
+                    <g:if test="${session.user}">
+                        <li><dsh:showInboxLinkOrDownload resource="${item.resource}"></dsh:showInboxLinkOrDownload></li>
+                        <li><dsh:markAsReadUnRead item="${item}"></dsh:markAsReadUnRead></li>
+                        <li><dsh:viewResource rid="${item.resource.id}"></dsh:viewResource></li>
+                    </g:if>
                 </ul>
             </div>
         </div>
