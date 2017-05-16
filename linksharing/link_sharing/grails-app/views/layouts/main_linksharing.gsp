@@ -33,8 +33,6 @@
                     <div class="form-group">
                         <input type="text" class="form-control" name="q" placeholder="Search">
                     </div>
-                    <g:hiddenField name="visibility" id="visibility" class="visibility"
-                                   value="PUBLIC"/>
                 </g:form>
 
                 <ul class="nav navbar-nav navbar-right">

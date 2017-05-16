@@ -37,17 +37,13 @@ abstract class Resource {
     static namedQueries = {
         search { ResourceSearchCO resourceSearchCO ->
             if (resourceSearchCO.q) {
-                if (resourceSearchCO.topicID) {
-                    eq('topic.id', resourceSearchCO.topicID)
-                }
-                if (resourceSearchCO.visibility && resourceSearchCO.visibility == Visibility.PUBLIC) {
-                    'topic' {
-                        eq('visibility', Visibility.PUBLIC)
+                or{
+                    ilike('description', "%${resourceSearchCO.q}%")
+                    topic{
+                        ilike('topicName', "%${resourceSearchCO.q}%")
                     }
                 }
-                ilike('description', "%${resourceSearchCO.q}%")
             }
-
         }
     }
 
