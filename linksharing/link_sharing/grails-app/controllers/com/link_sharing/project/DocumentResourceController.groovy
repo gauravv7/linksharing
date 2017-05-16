@@ -1,6 +1,8 @@
 package com.link_sharing.project
 
 import com.link_sharing.project.co.DocumentResourceCO
+import com.link_sharing.project.constants.Constants
+import com.link_sharing.project.utils.QueryUtils
 
 class DocumentResourceController {
 
@@ -15,7 +17,7 @@ class DocumentResourceController {
         String fileName  = documentResourceCO.document.getOriginalFilename().substring(0,documentResourceCO.document.getOriginalFilename().length()-extension.length()-1)
         String finalFileName = fileName+'-'+session.user.id+"."+extension
 
-        if( fileUploadService.uploadFile(documentResourceCO.document, finalFileName) ){
+        if( fileUploadService.uploadFile(documentResourceCO.document, finalFileName, Constants.LOC_DOCUMENT_RESOURCE) ){
             DocumentResource documentResource = new DocumentResource(filePath: finalFileName,
                     description: documentResourceCO.description, topic: Topic.get(documentResourceCO.topic), createdBy: session.user)
             if (documentResource.validate()) {
@@ -52,6 +54,34 @@ class DocumentResourceController {
 
 
 
+        redirect(url: request.getHeader("referer"))
+    }
+
+    def download(Long id) {
+
+        if(session.user) {
+            DocumentResource documentResource = (DocumentResource) Resource.get(id)
+            User user = session.user
+            def file
+            if (documentResource && QueryUtils.ifTopicCanbeViewdBy(documentResource.topic, user)) {
+                def temp = new File(Constants.LOC_DOCUMENT_RESOURCE+"/"+documentResource.filePath)
+                if (temp.exists()) {
+                    file = temp
+                } else {
+                    file = null
+                }
+            }
+            log.info "file is: $documentResource.filePath"
+            log.info "file is: $file"
+            if (file) {
+                response.setHeader("Content-disposition", "attachment;filename=\"${documentResource.filePath}\"")
+                response.outputStream << file.bytes
+            } else {
+                flash.error = "resource not found"
+            }
+        } else {
+            flash.error = "please login to continue"
+        }
         redirect(url: request.getHeader("referer"))
     }
 

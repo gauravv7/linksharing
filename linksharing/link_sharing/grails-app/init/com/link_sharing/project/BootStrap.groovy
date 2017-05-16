@@ -21,6 +21,7 @@ class BootStrap {
         createResources()
         subscribeTopics()
         createReadingItems()
+        createResourceRatings()
     }
     def destroy = {
     }
@@ -127,17 +128,31 @@ class BootStrap {
 
                 if (Subscription.findByCreatedByAndTopic(user, topic)) {
                     topic.resources.each { resource ->
-
-                        if (resource.createdBy != user && !user.readingItems?.contains(resource)) {
+                        if (resource.createdBy != user && !user.readingItems?.contains(resource))
+                        {
                             ReadingItem readingItem = new ReadingItem(user: user, resource: resource, isRead: false)
-
-                            if (readingItem.save(flush:true)) {
-
+                            if (readingItem.save(flush:true))
+                            {
                                 log.info "${readingItem} saved in ${user}'s list"
+
                                 resource.addToReadingItems(readingItem)
                                 user.addToReadingItems(readingItem)
+                            }
+                            else {
+                                log.error "${readingItem} is not saved in ${user}'s list--- ${readingItem.errors.allErrors}"
+                            }
+                        }
+                        else
+                        {
+                            ReadingItem readingItem = new ReadingItem(user: user, resource: resource, isRead: true)
+                            if (readingItem.save(flush:true))
+                            {
+                                log.info "${readingItem} saved in ${user}'s list"
 
-                            } else {
+                                resource.addToReadingItems(readingItem)
+                                user.addToReadingItems(readingItem)
+                            }
+                            else {
                                 log.error "${readingItem} is not saved in ${user}'s list--- ${readingItem.errors.allErrors}"
                             }
                         }
@@ -159,7 +174,6 @@ class BootStrap {
                     if (resourceRating.save(flush:true)) {
                         log.info "${resourceRating} rating for ${readingItem.resource} by ${readingItem.user}"
                         readingItem.resource.addToRatings(resourceRating)
-                        readingItem.user.addToResourceRatings(resourceRating)
                     } else {
                         log.error "${resourceRating} rating not set for ${readingItem.resource} by ${readingItem.user} " +
                                 " ${resourceRating.errors.allErrors}"

@@ -25,3 +25,8 @@ grails:
         mail.smtp.socketFactory.fallback: "false"
     username: "csi.online2016@gmail.com"
     password: "qwerty@123456"
+  controllers:
+    upload:
+      maxFileSize: 5242880
+      maxRequestSize: 5242880
+

@@ -7,6 +7,7 @@
 //
 //= require jquery-2.2.0.min
 //= require bootstrap
+//= require star-rating.min.js
 //= require_tree .
 //= require_self
 
@@ -30,4 +31,23 @@ $(document).ready(function(){
         modal.find('.modal-body select#topic').val(tid)
       }
     })
+
+    $('.kv-ltr-theme-default-star').rating({
+        hoverOnClear: false,
+        showCaption: false,
+        showClear: false,
+        min: 1,
+        max: 5,
+        step: 1,
+        containerClass: 'is-star'
+    }).on("rating.change", function(event, value, caption) {
+        $.ajax({
+            url: $(event.target).data('url')+"?score="+value,
+            type: 'GET',
+            success: function(data){
+                console.log(data)
+                alert(data);
+            }
+        })
+    });
 })

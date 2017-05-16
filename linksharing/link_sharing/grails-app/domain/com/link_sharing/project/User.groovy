@@ -16,7 +16,7 @@ class User {
     String firstName;
     String lastName;
 
-    Byte[] photo;
+    String photo;
     Boolean admin;
     Boolean active;
     Date dateCreated;
@@ -34,7 +34,6 @@ class User {
 
     static mapping = {
         id(sort: 'desc')
-        photo(sqlType: 'longblob')
     }
 
     static constraints = {
@@ -68,7 +67,6 @@ class User {
                     property('createdBy.id', 'topicCreatedBy')
                     property('topicName', 'topicName')
                     property('visibility', 'topicVisibility')
-                    count('resources','posts')
                 }
                 'createdBy' {
                     property('id', 'userID')
@@ -129,10 +127,6 @@ class User {
 
     static List<ReadingItem> getUnReadItems(User user, SearchCO searchCO){
         List list = []
-        if(searchCO.q==null) {
-            printf "at null"
-            return null
-        }
 
         if (searchCO.q) {
             list = User.createCriteria().list {

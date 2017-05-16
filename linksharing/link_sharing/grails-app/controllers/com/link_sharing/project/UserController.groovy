@@ -2,6 +2,7 @@ package com.link_sharing.project
 
 import com.link_sharing.project.co.InviteCO
 import com.link_sharing.project.co.SearchCO
+import com.link_sharing.project.co.UserCO
 import com.link_sharing.project.constants.Constants
 import com.link_sharing.project.utils.EncryptUtils
 
@@ -10,17 +11,22 @@ class UserController {
     def mailService
 
     def index(SearchCO searchCO) {
-        List l = User.getUnReadItems(session.user, searchCO)
+        List unreadItems = ReadingItem.findAllByUserAndIsRead(session.user, false, [sort: "dateCreated", order: "desc"])
         log.info("user id is from uc: $session.user.id")
-        log.info("search items\n$l")
+        log.info("unread items\n$unreadItems")
         log.info("sbs topics \n${session.user?.getSubscribedTopics()}")
         log.info("user sbs \n${session.user?.userSubscriptions()}")
         log.info("user sbs size \n${session.user?.userSubscriptions().size()}")
         log.info("user trdntopic \n${Topic.getTrendingTopics()}")
+        def subscriptionCount = Subscription.countByCreatedBy(session.user)
+        def topicCount = Topic.countByCreatedBy(session.user)
         render view: 'dashboard', model: [
                 trendingTopics: Topic.getTrendingTopics(),
                 listVisibility: Visibility.values().toList(),
+                unreadItems: unreadItems,
                 userSubscriptions: session.user?.userSubscriptions(),
+                subscriptions: subscriptionCount,
+                topicCount: topicCount,
                 subscribedTopics: session.user?.getSubscribedTopics()
         ]
 
@@ -72,4 +78,5 @@ class UserController {
         }
         redirect(url: request.getHeader("referer"))
     }
+
 }

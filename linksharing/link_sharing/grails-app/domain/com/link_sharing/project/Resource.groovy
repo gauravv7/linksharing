@@ -60,6 +60,7 @@ abstract class Resource {
             eq('resource', this)
             order('totalVotes', 'desc')
         }
+        log.info "result from getRatingInfo $result"
         new RatingInfoVO(totalVotes: result[0], averageScore: result[1], totalScore: result[2])
     }
 

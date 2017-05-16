@@ -29,7 +29,24 @@
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse pull-right" id="bs-example-navbar-collapse-1">
-              <g:pageProperty name="page.nav" />
+                <form class="navbar-form navbar-left">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                    </div>
+                </form>
+                <ul class="nav navbar-nav navbar-right">
+                    <g:if test="${session.user}">
+                        <g:pageProperty name="page.nav" />
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>${session.user.userName}<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Profile</a></li>
+                                <li><a href="/logout">Logout</a></li>
+                            </ul>
+                        </li>
+                    </g:if>
+                </ul>
+
             </div><!-- /.navbar-collapse -->
           </div><!-- /.container-fluid -->
         </nav>

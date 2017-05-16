@@ -10,13 +10,13 @@ class FileUploadService {
 
     def grailsApplication
 
-    def String uploadFile(MultipartFile file, String name) {
+    def String uploadFile(MultipartFile file, String name, String dir) {
         String storagePath = ""
         if (Environment.current == Environment.PRODUCTION) {
-            storagePath = com.link_sharing.project.constants.Constants.LOC_DOCUMENT_RESOURCE
+            storagePath = dir
         } else {
 //            def servletContext = ServletContextHolder.servletContext
-            storagePath = com.link_sharing.project.constants.Constants.LOC_DOCUMENT_RESOURCE
+            storagePath = dir
         }
         log.info storagePath
         // Create storage path directory if it does not exist

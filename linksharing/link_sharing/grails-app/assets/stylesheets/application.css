@@ -9,5 +9,6 @@
 *
 *= require bootstrap
 *= require style
+*= require star-rating.min.css
 *= require_self
 */

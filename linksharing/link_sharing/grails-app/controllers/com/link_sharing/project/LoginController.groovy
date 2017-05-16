@@ -1,13 +1,16 @@
 package com.link_sharing.project
 
+import com.link_sharing.project.co.UserCO
 import com.link_sharing.project.constants.Constants
 import com.link_sharing.project.utils.EncryptUtils
+import com.link_sharing.project.utils.QueryUtils
 import com.link_sharing.project.vo.LoginVO
 import com.link_sharing.project.vo.TopicVO
 
 class LoginController {
 
     def mailService
+    def fileUploadService
 
     def index() {
         if (session?.user) {
@@ -35,17 +38,6 @@ class LoginController {
     def logout() {
         session.invalidate()
         redirect(action: 'index')
-    }
-
-    def register(String fname,String lname, String email, String pass, String confirm,String uname) {
-        User user = new User(firstName: fname, lastName: lname, email: email, userName: uname,password: pass,confirmPassword: confirm)
-        if(!user.save(flush:true)){
-            flash.message='Cannot be registered'
-            flash.errors = user.errors.allErrors.join(', ')
-            render flash.errors
-        } else{
-            render flash.message='Successfully registered!'
-        }
     }
 
     def forgotPassword() {
@@ -134,6 +126,27 @@ class LoginController {
             }
         } else {
             flash.error = "please enter an email"
+        }
+        redirect(url: request.getHeader("referer"))
+    }
+
+    def register(UserCO userCO){
+
+        User user = new User(firstName: userCO.firstName, lastName: userCO.lastName, email: userCO.email, userName: userCO.userName, password: userCO.password, confirmPassword: userCO.confirmPassword, admin: false, active: true)
+        String[] fileFrags = userCO.photograph.getOriginalFilename().split("\\.")
+        String extension = fileFrags[fileFrags.length-1]
+        String fileName  = userCO.photograph.getOriginalFilename().substring(0,userCO.photograph.getOriginalFilename().length()-extension.length()-1)
+        String finalFileName = fileName+'-'+QueryUtils.uniqueFileName().toString()+"."+extension
+
+        if( fileUploadService.uploadFile(userCO.photograph, finalFileName, Constants.LOC_PHOTO_RESOURCE) ){
+            user.photo = finalFileName
+            if(user.save(flush: true)){
+                flash.message = "user created"
+            } else{
+                flash.error = user.errors.allErrors.join(", ")
+            }
+        } else{
+            flash.error = "error while uploading photograph, try again"
         }
         redirect(url: request.getHeader("referer"))
     }
