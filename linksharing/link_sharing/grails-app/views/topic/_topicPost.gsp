@@ -28,11 +28,11 @@
             </div>
             <div class="col-sm-8">
                 <ul class="list-inline text-right">
-                    <li><dsh:showInboxLinkOrDownload resource="${item.resource}"></dsh:showInboxLinkOrDownload></li>
                     <g:if test="${session.user}">
+                        <li><dsh:showInboxLinkOrDownload resource="${item.resource}"></dsh:showInboxLinkOrDownload></li>
                         <li><dsh:markAsReadUnRead item="${item}"></dsh:markAsReadUnRead></li>
+                        <li><dsh:viewResource rid="${item.resource.id}"></dsh:viewResource></li>
                     </g:if>
-                    <li><dsh:viewResource rid="${item.resource.id}"></dsh:viewResource></li>
                 </ul>
             </div>
         </div>
