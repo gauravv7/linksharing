@@ -7,6 +7,7 @@ import com.link_sharing.project.ReadingItem as ReadingItem
 import com.link_sharing.project.co.ResourceSearchCO
 import com.link_sharing.project.vo.PostVO
 import com.link_sharing.project.vo.RatingInfoVO
+import org.hibernate.criterion.CriteriaSpecification
 
 abstract class Resource {
 
@@ -99,6 +100,32 @@ abstract class Resource {
         }
 
         return topPosts
+    }
+
+    static def recentPosts() {
+        return Resource.createCriteria().list(max: 5) {
+            resultTransformer CriteriaSpecification.ALIAS_TO_ENTITY_MAP
+            projections {
+                property('id', 'id')
+                property('description', 'description')
+                property('url', 'url')
+                property('filePath', 'filePath')
+                'topic' {
+                    property('id', 'topicID')
+                    property('topicName', 'tn')
+                    eq('visibility', Visibility.PUBLIC)
+                }
+                'createdBy' {
+                    property('id', 'userID')
+                    property('userName', 'un')
+                    property('firstName', 'fn')
+                    property('lastName', 'ln')
+                    property('photo','photo')
+                }
+                property('lastUpdated', 'lu')
+            }
+            order('lastUpdated', 'desc')
+        }
     }
 
     String toString() {

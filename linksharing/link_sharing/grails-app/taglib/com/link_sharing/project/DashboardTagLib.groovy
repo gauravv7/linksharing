@@ -95,4 +95,12 @@ class DashboardTagLib {
             }
     }
 
+    def viewResource = {
+        attrs, body ->
+            Long rid = attrs.rid
+            if(rid){
+                out << "<a class=\"text-right\" style=\"display: block\" href=\"${createLink(controller: 'resource', action: 'show', params: [id: rid])}\">view resource</a>"
+            }
+    }
+
 }

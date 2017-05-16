@@ -16,7 +16,11 @@ class LoginController {
         if (session?.user) {
             forward(controller: 'user', action: 'index')
         } else {
-            render view: '/index'
+            List recentShares = Resource.recentPosts()
+            log.info "recentShares: $recentShares"
+            render view: '/index', model:[
+                    recentShares: recentShares
+            ]
         }
     }
 
