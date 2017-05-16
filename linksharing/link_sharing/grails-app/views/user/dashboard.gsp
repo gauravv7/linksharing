@@ -52,7 +52,7 @@
                 <div class="panel-heading">
                   <h3 class="panel-title">Subscription</h3>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body panel-body-overflow">
                   <ul class="list-unstyled trending-topics">
                       <g:each in="${userSubscriptions}" var="us">
                           <li>
@@ -135,7 +135,7 @@
                 <div class="panel-heading">
                   <h3 class="panel-title">Trending Topics</h3>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body panel-body-overflow">
                   <ul class="list-unstyled trending-topics">
                     <li>
                       <div class="row">

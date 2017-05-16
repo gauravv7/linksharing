@@ -11,7 +11,7 @@
                     <div class="panel-heading">
                         Recent Shares
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body panel-body-overflow">
                         <g:each in="${recentShares}" var="rs">
                             <div class="row">
                                 <div class="col-sm-3">
@@ -57,7 +57,7 @@
                     <div class="panel-heading">
                         Top Posts
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body panel-body-overflow">
                         <g:each in="${topPosts}" var="post">
                             <div class="row">
                                 <div class="col-sm-3">

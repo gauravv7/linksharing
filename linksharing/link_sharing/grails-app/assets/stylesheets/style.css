@@ -60,7 +60,7 @@
     font-size: 22px;
     vertical-align: text-bottom;
 }
-.panel-body {
+.panel-body-overflow {
     padding: 15px;
     max-height: 250px;
     overflow-y: scroll;
