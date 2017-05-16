@@ -10,6 +10,11 @@ class LoginCheckInterceptor {
         if(controllerName.equals("user") && actionName.equals("getImage")){
             return true
         }
+        if(controllerName.equals("topic") && actionName.equals("show") && params.id){
+            if(Topic.load(params.id).visibility==Visibility.PUBLIC){
+                return true
+            }
+        }
         if(controllerName.equals("resource") && actionName.equals("show") && params.id){
             if(Resource.get(params.id).topic.visibility==Visibility.PUBLIC){
                 return true
