@@ -12,10 +12,7 @@ class DocumentResourceController {
         log.info "${documentResourceCO}"
         log.info "file name is ${documentResourceCO.document.getOriginalFilename()}"
 
-        String[] fileFrags = documentResourceCO.document.getOriginalFilename().split("\\.")
-        String extension = fileFrags[fileFrags.length-1]
-        String fileName  = documentResourceCO.document.getOriginalFilename().substring(0,documentResourceCO.document.getOriginalFilename().length()-extension.length()-1)
-        String finalFileName = fileName+'-'+session.user.id+"."+extension
+        String finalFileName = fileUploadService.getUniqueFileName(documentResourceCO.document)
 
         if( fileUploadService.uploadFile(documentResourceCO.document, finalFileName, Constants.LOC_DOCUMENT_RESOURCE) ){
             DocumentResource documentResource = new DocumentResource(filePath: finalFileName,

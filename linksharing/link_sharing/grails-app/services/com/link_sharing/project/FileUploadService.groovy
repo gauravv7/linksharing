@@ -1,5 +1,6 @@
 package com.link_sharing.project
 
+import com.link_sharing.project.utils.QueryUtils
 import grails.transaction.Transactional
 import grails.util.Environment
 import grails.web.context.ServletContextHolder
@@ -39,5 +40,13 @@ class FileUploadService {
             println "File ${file.inspect()} was empty!"
             return null
         }
+    }
+
+    String getUniqueFileName(MultipartFile file){
+        String[] fileFrags = file.getOriginalFilename().split("\\.")
+        String extension = fileFrags[fileFrags.length-1]
+        String fileName  = file.getOriginalFilename().substring(0,file.getOriginalFilename().length()-extension.length()-1)
+        String finalFileName = fileName+'-'+QueryUtils.uniqueFileName().toString()+"."+extension
+        return finalFileName
     }
 }

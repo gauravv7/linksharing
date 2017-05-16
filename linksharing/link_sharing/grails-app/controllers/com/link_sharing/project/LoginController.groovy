@@ -143,10 +143,7 @@ class LoginController {
     def register(UserCO userCO){
 
         User user = new User(firstName: userCO.firstName, lastName: userCO.lastName, email: userCO.email, userName: userCO.userName, password: userCO.password, confirmPassword: userCO.confirmPassword, admin: false, active: true)
-        String[] fileFrags = userCO.photograph.getOriginalFilename().split("\\.")
-        String extension = fileFrags[fileFrags.length-1]
-        String fileName  = userCO.photograph.getOriginalFilename().substring(0,userCO.photograph.getOriginalFilename().length()-extension.length()-1)
-        String finalFileName = fileName+'-'+QueryUtils.uniqueFileName().toString()+"."+extension
+        String finalFileName = fileUploadService.getUniqueFileName(userCO.photograph)
 
         if( fileUploadService.uploadFile(userCO.photograph, finalFileName, Constants.LOC_PHOTO_RESOURCE) ){
             user.photo = finalFileName
