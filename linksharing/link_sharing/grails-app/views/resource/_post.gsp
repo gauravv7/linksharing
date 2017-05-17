@@ -1,16 +1,17 @@
 <div class="row">
-    <div class="col-sm-3">
-        <dsh:showProfilePic filepath="$item.user.photo" styleClasses="trending-topics-profile-img"></dsh:showProfilePic>
+    <div class="col-sm-2">
+        <dsh:showProfilePic filepath="$item.user.photo" styleClasses="post-profile-img"></dsh:showProfilePic>
     </div>
-    <div class="col-sm-9">
+    <div class="col-sm-10">
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-6 no-mar">
                 <h5>
-                    ${item.user.getFullName()} <span>@${item.user.userName}</span>
+
+                    ${item.user.getFullName()} <span>@<dsh:showUserNameLink id="${item.user.id}"></dsh:showUserNameLink></span>
                 </h5>
             </div>
             <div class="col-sm-6">
-                <h5 class="text-right">${item.resource.topic.topicName}</h5>
+                <h5 class="text-right"><dsh:showTopicNameLink id="${item.resource.topic.id}"></dsh:showTopicNameLink></h5>
             </div>
         </div>
         <div class="row">
@@ -19,14 +20,7 @@
             </p>
         </div>
         <div class="row">
-            <div class="col-sm-4">
-                <p>
-                    <span>f</span>
-                    <span>t</span>
-                    <span>g+</span>
-                </p>
-            </div>
-            <div class="col-sm-8">
+            <div class="col-sm-12">
                 <ul class="list-inline text-right">
                     <li><dsh:showInboxLinkOrDownload resource="${item.resource}"></dsh:showInboxLinkOrDownload></li>
                     <g:if test="${session.user}">
