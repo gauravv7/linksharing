@@ -50,6 +50,13 @@ class DashboardTagLib {
         }
     }
 
+    def topicCount = { attrs, body ->
+        Long userId = attrs.userId
+        if (userId) {
+            out << Topic.countByCreatedBy(User.load(userId))
+        }
+    }
+
     def postCount = { attrs, body ->
         Long topicId = attrs.topicId
         out << Resource.countByTopic(Topic.load(topicId))
