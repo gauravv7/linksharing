@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <h3>${item.firstName}</h3>
-                <p>@${item.userName}</p>
+                <p><dsh:showUserNameLink id="${item.id}"></dsh:showUserNameLink></p>
             </div>
         </div>
         <div class="row">
