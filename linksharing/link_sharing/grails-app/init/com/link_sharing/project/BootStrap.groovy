@@ -2,10 +2,13 @@ package com.link_sharing.project
 
 import com.link_sharing.project.constants.Constants
 import grails.config.Config
+import org.springframework.mock.web.MockMultipartFile
 
 class BootStrap {
 
     def grailsApplication
+    def assetResourceLocator
+    def fileUploadService
 
     def init = { servletContext ->
         // Get configuration from GrailsApplication.
@@ -69,7 +72,10 @@ class BootStrap {
 
         Topic.list().each { Topic topic ->
             Integer countResources = Resource.countByTopic(topic)
+            MockMultipartFile document = new MockMultipartFile("test", new FileInputStream('grails-app/assets/resources/test.pdf'))
+            String finalFileName = Constants.DEFAULT_DOCUMENT
 
+            fileUploadService.uploadFile(document, finalFileName, Constants.LOC_DOCUMENT_RESOURCE)
             if (!countResources) {
                 2.times {
                     Resource documentResource = new DocumentResource(description: "topic ${topic} doc", createdBy: topic
