@@ -5,7 +5,7 @@
                 <h3 class="panel-title">Register</h3>
             </div>
             <div class="panel-body">
-                <g:uploadForm class="form-horizontal" controller="login" action="register">
+                <g:uploadForm class="form-horizontal" controller="login" action="register" name="register-form" >
                     <div class="form-group">
                         <label for="firstName" class="col-sm-2 control-label">First Name</label>
                         <div class="col-sm-10">

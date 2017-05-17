@@ -87,3 +87,6 @@ fs-14{
 .panel-footer{
     margin: 0 10px;
 }
+.error{
+    color: red;
+}

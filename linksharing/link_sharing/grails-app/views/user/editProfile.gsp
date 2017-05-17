@@ -94,7 +94,7 @@
                         Change Password
                     </div>
                     <div class="panel-body">
-                        <g:uploadForm class="form-horizontal" controller="user" action="updatePassword">
+                        <g:uploadForm class="form-horizontal" controller="user" action="updatePassword" name="change-password">
                             <div class="form-group">
                                 <label for="password" class="col-sm-2 control-label">Password</label>
                                 <div class="col-sm-10">
