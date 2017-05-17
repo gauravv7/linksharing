@@ -116,4 +116,31 @@ class UserController {
         response.outputStream << img
         response.outputStream.flush()
     }
+
+    def profile(Long id){
+        User user = null
+        if(id){
+            user = User.get(id)
+        } else if(session.user) {
+            user = session.user
+        }
+
+        List topics = Topic.findAllByCreatedByAndVisibility(user, Visibility.PUBLIC)
+        def subscribedTopics = Subscription.findAllByCreatedBy(user)
+        def subscriptionCount = Subscription.countByCreatedBy(user)
+        def topicCount = Topic.countByCreatedBy(user)
+        def posts = Resource.findAllByCreatedBy(user, [max: 5, sort:'id', order: 'desc'])
+
+        log.info "subscribedTopics for profile $subscribedTopics"
+        log.info "profile topics $topics"
+
+        render view: 'profile', model: [
+                user: user,
+                subscriptions: subscriptionCount,
+                topicCount: topicCount,
+                subscribedTopics: subscribedTopics,
+                topics: topics,
+                posts: posts
+        ]
+    }
 }

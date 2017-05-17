@@ -79,6 +79,26 @@ class User {
         }
     }
 
+    Map getSubscribedTopicList() {
+
+        List topicNameList = Subscription.createCriteria().list {
+            projections {
+                'topic' {
+                    property('id')
+                    property('topicName')
+                    createdBy {
+                        property('userName')
+                    }
+                }
+                'createdBy'{
+                    eq('id', id)
+                }
+            }
+        }
+        log.info("${topicNameList}")
+        return topicNameList
+    }
+
     Map getSubscribedTopics() {
 
         Map topicNameList = Subscription.createCriteria().list {
