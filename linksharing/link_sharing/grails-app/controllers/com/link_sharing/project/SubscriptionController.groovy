@@ -7,13 +7,38 @@ class SubscriptionController {
     def save(Long topicId) {
         Topic topic = Topic.get(topicId)
         if (topic) {
-            User user = session.user
+            User user = User.get(session.user.id)
             Subscription subscription = new Subscription(createdBy: user, topic: topic,seriousness: Seriousness.CASUAL)
-            if (subscription.save(flush: true)) {
-                flash.message = "Subscription saved successfully"
+            if (subscription.validate()) {
+
+                user.confirmPassword=user.password
+
+                subscription.topic.resources.each
+                        {
+                            if (!user.readingItems?.contains(it))
+                            {
+                                ReadingItem readingItem = new ReadingItem(user: user, resource:it, isRead: false)
+                                if (readingItem.save(flush:true))
+                                {
+                                    log.info "${readingItem} saved in ${user}'s list"
+
+                                    it.addToReadingItems(readingItem)
+                                    user.addToReadingItems(readingItem)
+                                }
+                                else {
+                                    log.error "${readingItem} is not saved in ${user}'s list--- ${readingItem.errors.allErrors}"
+                                }
+                            }
+                        }
+                if (subscription.save(flush: true)) {
+                    flash.message = "Subscription saved successfully"
+                } else {
+                    flash.error = subscription.errors.allErrors.collect { message(error: it) }.join(", ")
+                }
             } else {
                 flash.error = subscription.errors.allErrors.collect { message(error: it) }.join(", ")
             }
+
         } else {
             flash.error = "Topic Does not Exist"
         }
