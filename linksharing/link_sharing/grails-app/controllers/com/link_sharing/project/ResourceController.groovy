@@ -60,7 +60,7 @@ class ResourceController {
 
             if(id && score){
                 Resource resource = Resource.load(id)
-                if(session.user.admin || resource.createdBy.id == session.user.id) {
+                if(Subscription.findByTopicAndCreatedBy(resource.topic, resource.createdBy)) {
                     ResourceRating rating = ResourceRating.findOrCreateByCreatedByAndResource(session.user, resource)
                     //findOrCreateBy bcoz, rating doesn't exists for 1sst time
                     rating.score = score
@@ -70,7 +70,7 @@ class ResourceController {
                         msg = rating.errors.allErrors.join(', ')
                     }
                 } else {
-                    flash.error = "unauthorized request"
+                   msg  = "unauthorized request, please subscribe this topic to rate"
                 }
             } else{
                 msg = "invalid arguments"
