@@ -35,12 +35,14 @@ class LoginController {
             if (user.active) {
                 session.user = user
                 redirect(controller: 'login', action: 'index')
+                return
             } else {
-                render flash.error = "User is not active"
+                flash.error = "User is not active"
             }
         } else {
-            render flash.error = "User not found"
+            flash.error = "User not found"
         }
+        redirect(url: request.getHeader("referer"))
     }
 
     def logout() {
