@@ -83,6 +83,22 @@ class DashboardTagLib {
             }
     }
 
+    def showUserNameLink = {
+        attrs, body ->
+            User user = User.load(attrs.id)
+            if(user){
+                out << link(controller: 'user', action: 'profile', params: [id: user.id]) {user.userName}
+            }
+    }
+
+    def showTopicNameLink = {
+        attrs, body ->
+            Topic topic = Topic.load(attrs.id)
+            if(topic){
+                out << link(controller: 'topic', action: 'show', params: [id: topic.id]) {topic.topicName}
+            }
+    }
+
     def markAsReadUnReadForTopicShow = {
         attrs, body ->
             ReadingItem item = ReadingItem.findByResourceAndUser(attrs.item, User.load(attrs.item.createdBy.id))
