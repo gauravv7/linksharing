@@ -40,7 +40,7 @@
 .trending-topics-profile-img{
 	margin: 5px 0;
     border-radius: 5px;
-    max-width: 100px;
+    max-width: 145px;
     height: auto;
 }
 .inbox .panel-body > .row{
@@ -67,4 +67,14 @@
     padding: 15px;
     max-height: 450px;
     overflow-y: scroll;
+}
+.panel-body p, .panel-body h3, .panel-body h4, .panel-body h5, .panel-body h6 {
+    margin: 5px 0;
+    font-size: 14px;
+}
+.no-mar{
+    margin: 5px 0;
+}
+fs-14{
+    font-size: 14px;
 }

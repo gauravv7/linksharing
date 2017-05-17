@@ -5,7 +5,7 @@
     <div class="col-sm-8">
         <div class="row">
             <div class="col-sm-12">
-                <h3>${item.topicName}</h3>
+                <h3><dsh:showTopicNameLink id="${item.topicID}"></dsh:showTopicNameLink></h3>
             </div>
         </div>
         <div class="row">

@@ -23,15 +23,11 @@ class UserController {
         log.info("user sbs \n${session.user?.userSubscriptions()}")
         log.info("user sbs size \n${session.user?.userSubscriptions().size()}")
         log.info("user trdntopic \n${tt}")
-        def subscriptionCount = Subscription.countByCreatedBy(session.user)
-        def topicCount = Topic.countByCreatedBy(session.user)
         render view: 'dashboard', model: [
                 trendingTopics: Topic.getTrendingTopics(),
                 listVisibility: Visibility.values().toList(),
                 unreadItems: unreadItems,
                 userSubscriptions: session.user?.userSubscriptions(),
-                subscriptions: subscriptionCount,
-                topicCount: topicCount,
                 trendingTopics: tt,
                 subscribedTopics: session.user?.getSubscribedTopics()
         ]
@@ -129,8 +125,6 @@ class UserController {
 
         List topics = Topic.findAllByCreatedByAndVisibility(user, Visibility.PUBLIC)
         def subscribedTopics = Subscription.findAllByCreatedBy(user)
-        def subscriptionCount = Subscription.countByCreatedBy(user)
-        def topicCount = Topic.countByCreatedBy(user)
         def posts = Resource.findAllByCreatedBy(user, [max: 5, sort:'id', order: 'desc'])
 
         log.info "subscribedTopics for profile $subscribedTopics"
@@ -138,8 +132,6 @@ class UserController {
 
         render view: 'profile', model: [
                 user: user,
-                subscriptions: subscriptionCount,
-                topicCount: topicCount,
                 subscribedTopics: subscribedTopics,
                 topics: topics,
                 posts: posts

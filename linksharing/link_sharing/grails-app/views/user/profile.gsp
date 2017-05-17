@@ -21,28 +21,7 @@
       <div class="row" style="padding: 2px 15px;">
         <div class="col-md-5" >
           <div class="row" style="border: 1px solid #b2b2b2  ; border-radius: 5px; margin: 0">
-            <div class="col-sm-4">
-                <!--<img style="margin: 5px 0; border-radius: 5px;" src="${createLink(controller: 'user', action: 'getImage', params: [filepath: session.user.photo?: 'default-user.png' ])}"/>-->
-                <dsh:showProfilePic filepath="$user.photo" styleClasses="trending-topics-profile-img"></dsh:showProfilePic>
-            </div>
-            <div class="col-sm-8">
-              <div class="row">
-                <div class="col-sm-12">
-                  <h3>${user.getFullName()}</h3>
-                  <p>@${user.userName}</p>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-6">
-                  <h4>Subsciption</h4>
-                  <h5>${subscriptions}</h5>
-                </div>
-                <div class="col-md-6">
-                  <h4>Topics</h4>
-                  <h5>${topicCount}</h5>
-                </div>
-              </div>
-            </div>
+            <g:render template="details" model="['user': user]"></g:render>
           </div>
 
           <br>
@@ -60,13 +39,13 @@
                                   <div class="col-sm-12">
                                       <div class="row">
                                           <div class="col-sm-12">
-                                              <h3>${us.topicName}</h3>
+                                              <h3><dsh:showTopicNameLink id="${us.id}"></dsh:showTopicNameLink></h3>
                                               <p></p>
                                           </div>
                                       </div>
                                       <div class="row">
                                           <div class="col-sm-12">
-                                              <h3>${us.createdBy.firstName}</h3>
+                                              <h3><dsh:showUserNameLink id="${us.createdBy.id}"></dsh:showUserNameLink></h3>
                                               <p></p>
                                           </div>
                                       </div>
@@ -151,7 +130,7 @@
           <div class="row inbox">
             <div class="panel panel-primary">
               <div class="panel-heading">
-                Inbox
+                Posts
               </div>
               <div class="panel-body">
                   <g:each in="${posts}" var="item">

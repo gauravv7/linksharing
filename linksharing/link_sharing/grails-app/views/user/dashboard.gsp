@@ -21,28 +21,7 @@
       <div class="row" style="padding: 2px 15px;">
         <div class="col-md-5" >
           <div class="row" style="border: 1px solid #b2b2b2  ; border-radius: 5px; margin: 0">
-            <div class="col-sm-4">
-                <!--<img style="margin: 5px 0; border-radius: 5px;" src="${createLink(controller: 'user', action: 'getImage', params: [filepath: session.user.photo?: 'default-user.png' ])}"/>-->
-                <dsh:showProfilePic filepath="$session.user.photo" styleClasses="trending-topics-profile-img"></dsh:showProfilePic>
-            </div>
-            <div class="col-sm-8">
-              <div class="row">
-                <div class="col-sm-12">
-                  <h3>${session.user.getFullName()}</h3>
-                  <p>@${session.user.userName}</p>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-6">
-                  <h4>Subsciption</h4>
-                  <h5>${subscriptions}</h5>
-                </div>
-                <div class="col-md-6">
-                  <h4>Topics</h4>
-                  <h5>${topicCount}</h5>
-                </div>
-              </div>
-            </div>
+              <g:render template="details" model="['user': session.user]"></g:render>
           </div>
 
           <br>
@@ -63,14 +42,13 @@
                                   <div class="col-sm-8">
                                       <div class="row">
                                           <div class="col-sm-12">
-                                              <h3>${us.topicName}</h3>
-                                              <p></p>
+                                              <h3><dsh:showTopicNameLink id="${us.topicID}"></dsh:showTopicNameLink></h3>
                                           </div>
                                       </div>
                                       <div class="row">
                                           <div class="col-sm-12">
-                                              <h3>${us.fn}</h3>
-                                              <p></p>
+                                              <h3><dsh:showUserNameLink id="${us.topicCreatedBy}"></dsh:showUserNameLink></h3>
+                                              <br/>
                                           </div>
                                       </div>
                                       <div class="row">
@@ -87,40 +65,41 @@
                                               <h5><dsh:postCount topicId="${us.topicID}"></dsh:postCount ></h5>
                                           </div>
                                       </div>
+                                      <dsh:ifSubscribed topicId="${us.topicID}" userId="${session.user.id}">
+                                          <div class="row">
+                                              <div class="col-md-12">
+                                                  <ul class="list-inline">
+                                                      <li>
+                                                          <g:form controller="subscription" action="updateSeriousness">
+                                                              <g:field type="hidden" name="sid" value="${us.id}"></g:field>
+                                                              <g:select onChange="submit()" name="seriousness" from="${com.link_sharing.project.Seriousness.values()}"
+                                                                        class="dropdown-toggle btn btn-default col-sm-8 subscription-select form-control" optionKey="key" value="${us.topicSeriousness}" />
+                                                          </g:form>
+                                                      </li>
+                                                      <li>
+                                                          <g:form controller="topic" action="updateVisibility">
+                                                              <g:field type="hidden" name="topicId" value="${us.topicID}"></g:field>
+                                                              <g:select onChange="submit()" name="visibility" from="${com.link_sharing.project.Visibility.values()}"
+                                                                        class="dropdown-toggle btn btn-default col-sm-8 subscription-select form-control" optionKey="key" value="${us.topicVisibility}" />
+                                                          </g:form>
+                                                      </li>
+                                                      <g:if test="${us.topicVisibility==com.link_sharing.project.Visibility.PRIVATE}">
+                                                          <li>
+                                                              <a type="button" class="subscription-invite-btn" data-toggle="modal" data-target="#sendInvite" data-topicid="${us.topicID}"><span class="glyphicon glyphicon-envelope"></span></a>
+                                                          </li>
+                                                      </g:if>
+                                                      <g:if test="${session.user.id==us.topicCreatedBy}">
+                                                          <li>
+                                                              <a type="button" class="subscription-invite-btn" href="${createLink(controller: 'topic', action: 'remove', params: [topicId: us.topicID])}"><span class="glyphicon glyphicon-trash"></span></a>
+                                                          </li>
+                                                      </g:if>
+                                                  </ul>
+                                              </div>
+                                          </div>
+                                      </dsh:ifSubscribed>
                                   </div>
                               </div>
-                              <dsh:ifSubscribed topicId="${us.topicID}" userId="${session.user.id}">
-                                  <div class="row">
-                                      <div class="col-md-12">
-                                          <ul class="list-inline">
-                                              <li>
-                                                  <g:form controller="subscription" action="updateSeriousness">
-                                                      <g:field type="hidden" name="sid" value="${us.id}"></g:field>
-                                                      <g:select onChange="submit()" name="seriousness" from="${com.link_sharing.project.Seriousness.values()}"
-                                                                class="dropdown-toggle btn btn-default col-sm-8 subscription-select" optionKey="key" value="${us.topicSeriousness}" />
-                                                  </g:form>
-                                              </li>
-                                              <li>
-                                                  <g:form controller="topic" action="updateVisibility">
-                                                      <g:field type="hidden" name="topicId" value="${us.topicID}"></g:field>
-                                                      <g:select onChange="submit()" name="visibility" from="${com.link_sharing.project.Visibility.values()}"
-                                                                class="dropdown-toggle btn btn-default col-sm-8 subscription-select" optionKey="key" value="${us.topicVisibility}" />
-                                                  </g:form>
-                                              </li>
-                                              <g:if test="${us.topicVisibility==com.link_sharing.project.Visibility.PRIVATE}">
-                                                  <li>
-                                                      <a type="button" class="subscription-invite-btn" data-toggle="modal" data-target="#sendInvite" data-topicid="${us.topicID}"><span class="glyphicon glyphicon-envelope"></span></a>
-                                                  </li>
-                                              </g:if>
-                                              <g:if test="${session.user.id==us.topicCreatedBy}">
-                                                  <li>
-                                                      <a type="button" class="subscription-invite-btn" href="${createLink(controller: 'topic', action: 'remove', params: [topicId: us.topicID])}"><span class="glyphicon glyphicon-trash"></span></a>
-                                                  </li>
-                                              </g:if>
-                                          </ul>
-                                      </div>
-                                  </div>
-                              </dsh:ifSubscribed>
+
                           </li>
                       </g:each>
                   </ul>
