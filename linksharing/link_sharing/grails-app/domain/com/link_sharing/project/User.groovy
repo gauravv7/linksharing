@@ -74,6 +74,8 @@ class User {
                     property('lastName', 'ln')
                     property('firstName', 'fn')
                     property('photo', 'pic')
+                    eq('id', this.id)
+
                 }
             }
         }
@@ -91,7 +93,7 @@ class User {
                     }
                 }
                 'createdBy'{
-                    eq('id', id)
+                    eq('id', this.id)
                 }
             }
         }
@@ -111,7 +113,7 @@ class User {
                     }
                 }
                 'createdBy'{
-                    eq('id', id)
+                    eq('id', this.id)
                 }
             }
         }.inject([:]){ result, k ->
