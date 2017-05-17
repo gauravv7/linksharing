@@ -43,6 +43,10 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>${session.user.userName}<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href="${createLink(controller: 'user', action: 'profile', id: session.user.id)}">Profile</a></li>
+                                <g:if test="${session.user.admin}">
+                                    <li><a href="${createLink(controller: 'user', action: 'all')}">Show all User</a></li>
+                                </g:if>
+                                <li><a href="${createLink(controller: 'user', action: 'edit')}">Edit Profile</a></li>
                                 <li><a href="/logout">Logout</a></li>
                             </ul>
                         </li>

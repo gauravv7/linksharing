@@ -94,6 +94,19 @@ class DashboardTagLib {
             }
     }
 
+    def showActivateDeactiveAction = {
+        attrs, body ->
+            Long id = attrs.id
+            User user = User.get(id)
+            if(user){
+                if(!user.active){
+                    out << link(controller: 'user', action: 'activate', params: [id: id]) {'Activate'}
+                } else {
+                    out << link(controller: 'user', action: 'activate', params: [id: id]) {'Deactive'}
+                }
+            }
+    }
+
     def showIfAdminOrResourceCreatedBy = {
         attrs, body ->
             Resource r = Resource.load(attrs.resource)

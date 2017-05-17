@@ -2,6 +2,7 @@ package com.link_sharing.project
 
 import com.link_sharing.project.co.InviteCO
 import com.link_sharing.project.co.SearchCO
+import com.link_sharing.project.co.UserCO
 import com.link_sharing.project.constants.Constants
 import com.link_sharing.project.utils.EncryptUtils
 
@@ -11,6 +12,7 @@ import java.awt.image.BufferedImage
 class UserController {
 
     def mailService
+    def fileUploadService
 
     def index(SearchCO searchCO) {
         List unreadItems = ReadingItem.findAllByUserAndIsRead(session.user, false, [sort: "dateCreated", order: "desc"])
@@ -142,5 +144,79 @@ class UserController {
                 topics: topics,
                 posts: posts
         ]
+    }
+
+    def edit(){
+        render view: 'editProfile'
+    }
+
+    def updateProfile(UserCO userCO){
+        User user = User.get(session.user.id)
+        user.firstName = userCO.firstName
+        user.lastName = userCO.lastName
+        user.userName = userCO.userName
+        user.password = user.password
+        user.confirmPassword = user.password
+
+        if(userCO.photograph.bytes.length){
+            String finalFileName = fileUploadService.getUniqueFileName(userCO.photograph)
+
+            if( fileUploadService.uploadFile(userCO.photograph, finalFileName, Constants.LOC_PHOTO_RESOURCE) ){
+                user.photo = finalFileName
+            } else{
+                flash.error = "error while uploading photograph, try again"
+            }
+        }
+        if(user.save(flush: true)){
+            flash.message = "user updated"
+        } else{
+            flash.error = user.errors.allErrors.join(", ")
+        }
+        redirect(url: request.getHeader("referer"))
+    }
+
+    def updatePassword(String password, String confirmPassword){
+        User user = User.get(session.user.id)
+        if(user){
+            if(password.equals(confirmPassword)){
+                user.password = password
+                user.confirmPassword = confirmPassword
+                if(user.save(flush: true)){
+                    flash.message = "Password has been reset"
+                } else{
+                    flash.error = user.errors.allErrors.join(", ")
+                }
+            } else {
+                flash.error = "passwords are not equal"
+            }
+        } else {
+            flash.error = "invalid request"
+        }
+        redirect(url: request.getHeader("referer"))
+    }
+
+    def all(){
+        render view: '/admin_index', model: [users: User.list(params), userCount: User.count()]
+    }
+
+    def activate(Long id){
+
+        if(id){
+
+            User user = User.get(id)
+            if(user){
+                user.active = !user.active
+                user.password = user.password
+                user.confirmPassword = user.password
+                if(user.save(flush: true)){
+                    flash.message = "user activation updated"
+                } else{
+                    flash.error = user.errors.allErrors.join(', ')
+                }
+            } else{
+                flash.error = "user not found"
+            }
+        }
+        redirect(url: request.getHeader("referer"))
     }
 }
