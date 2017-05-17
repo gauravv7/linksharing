@@ -49,7 +49,7 @@ class Topic {
         }
     }
 
-    static def getTrendingTopics() {
+    static def getTrendingTopics(def params){
         return Resource.createCriteria().list {
             resultTransformer CriteriaSpecification.ALIAS_TO_ENTITY_MAP
             projections {
@@ -64,7 +64,8 @@ class Topic {
             }
             order('topicCount', 'desc')
             order('topicName', 'asc')
-            maxResults(5)
+            maxResults((params.max as int)?: 5)
+            firstResult((params.offset as int)?: 0)
         }
     }
 

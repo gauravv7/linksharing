@@ -19,23 +19,36 @@ class UserController {
         params.offset = 0
         List unreadItems = ReadingItem.findAllByUserAndIsRead(session.user, false, params)
         def unreadItemsCount = ReadingItem.countByUserAndIsRead(session.user, false)
-        List tt = Topic.getTrendingTopics()
+        def subscriptionCount = Subscription.countByCreatedBy(session.user)
+        List trendingTopics = Topic.getTrendingTopics(params)
+        def trendingTopicsCount = trendingTopics.size()
         log.info("user id is from uc: $session.user.id")
         log.info("unread items\n$unreadItems")
         log.info("sbs topics \n${session.user?.getSubscribedTopics()}")
-        log.info("user sbs \n${session.user?.userSubscriptions()}")
-        log.info("user sbs size \n${session.user?.userSubscriptions().size()}")
-        log.info("user trdntopic \n${tt}")
+        log.info("user sbs \n${session.user?.userSubscriptions(params)}")
+        log.info("user sbs size \n${subscriptionCount}")
+        log.info("user trdntopic \n${trendingTopics}")
+        log.info("user trdntopic size\n${trendingTopicsCount}")
         render view: 'dashboard', model: [
-                trendingTopics: Topic.getTrendingTopics(),
                 listVisibility: Visibility.values().toList(),
                 unreadItems: unreadItems,
-                userSubscriptions: session.user?.userSubscriptions(),
-                trendingTopics: tt,
+                userSubscriptions: session.user?.userSubscriptions([max: 2, offset: 0]),
+                subscriptionCount: subscriptionCount,
+                trendingTopics: trendingTopics,
+                trendingTopicsCount: trendingTopicsCount,
                 unreadItemsCount: unreadItemsCount,
                 subscribedTopics: session.user?.getSubscribedTopics()
         ]
 
+    }
+
+
+    def filterForTrendingTopics(){
+        render(template:"/topic/trendingTopics" ,model:[ trendingTopics: Topic.getTrendingTopics(params)])
+    }
+
+    def filterForSubscriptions(){
+        render(template:"/user/subscriptions" ,model:[ userSubscriptions: session.user?.userSubscriptions(params)])
     }
 
 

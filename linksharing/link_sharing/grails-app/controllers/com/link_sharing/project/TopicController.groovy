@@ -10,15 +10,18 @@ class TopicController {
 
     def show(Long id, ResourceSearchCO co) {
         Topic topic = Topic?.read(id)
+        params.max = 5
+        params.offset = 0
 
         if(topic) {
             List subscribedUsers = topic.subscribedUsers()
-            List posts = Resource.findAllByTopicAndCreatedBy(topic, topic.createdBy)
+            List posts = Resource.findAllByTopicAndCreatedBy(topic, topic.createdBy, params)
+            def postsCount = Resource.countByTopicAndCreatedBy(topic, topic.createdBy)
             log.info "subscribedUsers: $subscribedUsers"
             Subscription seriousness = Subscription.findByTopicAndCreatedBy(topic, topic.createdBy)
             if (topic.visibility == Visibility.PUBLIC) {
                 render view: 'show', model: [
-                        subscribedUsers: subscribedUsers, topic: topic, posts: posts, subscription: seriousness
+                        subscribedUsers: subscribedUsers, topic: topic, posts: posts, subscription: seriousness, postsCount: postsCount
                 ]
             } else if (topic.visibility == Visibility.PRIVATE) {
                 if (Subscription?.findByCreatedByAndTopic(session.user, topic)) {
@@ -35,6 +38,11 @@ class TopicController {
             log.info("Topic does not exist")
             redirect(controller:'login' , action:'index')
         }
+    }
+
+    def filterForPosts(){
+        Topic topic = Topic?.read(id)
+        render(template:"/topic/trendingTopics" ,model:[ posts: Resource.findAllByTopicAndCreatedBy(topic, topic.createdBy, params)])
     }
 
     def remove(Long topicId) {

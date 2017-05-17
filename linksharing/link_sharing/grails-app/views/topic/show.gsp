@@ -109,9 +109,15 @@
                         Posts
                     </div>
                     <div class="panel-body">
-                        <g:each in="${posts}" var="item">
-                            <g:render template="topicPost" model="[item: item]"></g:render>
-                        </g:each>
+                        <div class="panel-body">
+                            <div id="postsDiv">
+                                <g:render template="topicPost"></g:render>
+                            </div>
+                        </div> <!-- body-->
+                        <div class="panel-footer">
+                            <util:remotePaginate controller="topic" action="filterForPosts" total="${postsCount}"
+                                                 update="postsDiv" prev="prev" max="5" params="${params}"/>
+                        </div>
                     </div> <!-- body-->
                 </div>
             </div> <!-- row inbox-->

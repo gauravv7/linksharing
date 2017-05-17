@@ -54,7 +54,7 @@ class User {
     }
 
 
-    def userSubscriptions() {
+    def userSubscriptions(def params) {
 
         return Subscription.createCriteria().list() {
             resultTransformer CriteriaSpecification.ALIAS_TO_ENTITY_MAP
@@ -78,6 +78,8 @@ class User {
 
                 }
             }
+            maxResults((params.max as int)?: 2)
+            firstResult((params.offset as int)?: 0)
         }
     }
 

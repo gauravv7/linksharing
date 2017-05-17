@@ -11,7 +11,9 @@ class ResourceController {
 
         Resource resource = Resource.get(id)
         RatingInfoVO ratingInfoVO = null
-        List tt = Topic.getTrendingTopics()
+        params.max = 5
+        params.offset = 0
+        List tt = Topic.getTrendingTopics(params)
         if(resource){
             log.info "here in resource"
             ratingInfoVO = resource.getRatingInfo()
