@@ -28,6 +28,8 @@ class DashboardTagLib {
         attrs, body ->
             Long userId = attrs.userId
             Long topicId = attrs.topicId
+            log.info "from subsribed tl $userId"
+            log.info "from subsribed tl $topicId"
             if(topicId && userId) {
                 if(Subscription.findByTopicAndCreatedBy(Topic.load(topicId), User.load(userId))){
                     out << link(action:'delete',controller:'subscription', params: [topicId: topicId], absolute: true) { 'unsubscribe' }

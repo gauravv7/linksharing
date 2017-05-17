@@ -5,11 +5,16 @@
     <div class="col-sm-8">
         <div class="row">
             <div class="col-sm-12">
-                <h3>${item.createdBy.getFullName()}</h3>
-                <p>@${item.createdBy.userName}</p>
+                <h3>${item.topicName}</h3>
             </div>
         </div>
         <div class="row">
+            <div class="col-md-6">
+                <h4>@${item.createdBy.userName}</h4>
+                <g:if test="${session.user}">
+                    <h5><dsh:subscribed userId="${session.user.id}" topicId="${item.topicID}"></dsh:subscribed></h5>
+                </g:if>
+            </div>
             <div class="col-md-6">
                 <h4>Subsciption</h4>
                 <h5><dsh:subscriptionCount topicId="${item.topicID}"></dsh:subscriptionCount></h5>
