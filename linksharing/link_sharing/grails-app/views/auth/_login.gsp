@@ -5,7 +5,7 @@
                 <h3 class="panel-title">Login</h3>
             </div>
             <div class="panel-body">
-                <g:form class="form-horizontal" mapping="login">
+                <g:form class="form-horizontal" mapping="login" name="login-form">
                     <div class="form-group">
                         <label for="username_login" class="col-sm-2 control-label">Username</label>
                         <div class="col-sm-10">
@@ -20,9 +20,8 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
-                            <button type="submit" class="btn btn-default">Forgot Password</button>
-
-                            <button type="submit" class="btn btn-default">update</button>
+                            <a href="${createLink(controller: 'login', action: 'forgotPassword')}">Forgot Password?</a>
+                            <button type="submit" class="btn btn-default">Login</button>
                         </div>
                     </div>
                 </g:form>

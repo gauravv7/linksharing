@@ -7,6 +7,7 @@ buildscript {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
         classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.14.1"
         classpath "org.grails.plugins:hibernate5:${gormVersion-".RELEASE"}"
+        classpath "net.saliman:gradle-cobertura-plugin:2.3.2"
     }
 }
 
@@ -19,6 +20,8 @@ apply plugin:"war"
 apply plugin:"org.grails.grails-web"
 apply plugin:"org.grails.grails-gsp"
 apply plugin:"asset-pipeline"
+apply plugin: "net.saliman.cobertura"
+apply plugin: 'codenarc'
 
 repositories {
     mavenLocal()
@@ -39,6 +42,7 @@ dependencies {
     compile "org.hibernate:hibernate-core:5.1.3.Final"
     compile "org.hibernate:hibernate-ehcache:5.1.3.Final"
     console "org.grails:grails-console"
+    compile 'org.grails.plugins:remote-pagination:0.5.0'
     profile "org.grails.profiles:web"
     runtime "com.bertramlabs.plugins:asset-pipeline-grails:2.14.1"
     runtime "com.h2database:h2"
@@ -47,6 +51,9 @@ dependencies {
     testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
     testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
     compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.6'
+    compile 'org.grails.plugins:mail:2.0.0.RC6'
+    compile 'org.grails.plugins:grails-executor:0.4'
+
 }
 
 bootRun {
@@ -58,4 +65,16 @@ assets {
     minifyJs = true
     minifyCss = true
     includes = ["fonts/*"]
+}
+
+cobertura {
+    coverageFormats = ['html', 'xml']
+    coverageExcludes = ['.*com\\.egreement\\.accountapplication\\.enums\\.*.*',
+                        '.*com\\.egreement\\.accountapplication\\.Bootstrap',
+                        '.*com\\.egreement\\.accountapplication\\.Application',
+                        '.*com\\.egreement\\.accountapplication\\.LoggingInterceptor']
+}
+
+codenarcMain {
+    configFile = rootProject.file("grails-app/conf/CodeNarcRules.groovy")
 }

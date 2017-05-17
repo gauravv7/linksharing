@@ -6,6 +6,7 @@ import com.link_sharing.project.Resource as Resource
 import com.link_sharing.project.ReadingItem as ReadingItem
 import com.link_sharing.project.co.SearchCO
 import com.link_sharing.project.vo.TopicVO
+import org.hibernate.criterion.CriteriaSpecification
 
 class User {
 
@@ -15,7 +16,7 @@ class User {
     String firstName;
     String lastName;
 
-    Byte[] photo;
+    String photo;
     Boolean admin;
     Boolean active;
     Date dateCreated;
@@ -33,7 +34,6 @@ class User {
 
     static mapping = {
         id(sort: 'desc')
-        photo(sqlType: 'longblob')
     }
 
     static constraints = {
@@ -54,6 +54,55 @@ class User {
     }
 
 
+    def userSubscriptions(def params) {
+
+        return Subscription.createCriteria().list() {
+            resultTransformer CriteriaSpecification.ALIAS_TO_ENTITY_MAP
+            projections {
+                groupProperty('id')
+                property('id', 'id')
+                property('seriousness', 'topicSeriousness')
+                'topic' {
+                    property('id', 'topicID')
+                    property('createdBy.id', 'topicCreatedBy')
+                    property('topicName', 'topicName')
+                    property('visibility', 'topicVisibility')
+                }
+                'createdBy' {
+                    property('id', 'userID')
+                    property('userName', 'userName')
+                    property('lastName', 'ln')
+                    property('firstName', 'fn')
+                    property('photo', 'pic')
+                    eq('id', this.id)
+
+                }
+            }
+            maxResults((params.max as int)?: 2)
+            firstResult((params.offset as int)?: 0)
+        }
+    }
+
+    Map getSubscribedTopicList() {
+
+        List topicNameList = Subscription.createCriteria().list {
+            projections {
+                'topic' {
+                    property('id')
+                    property('topicName')
+                    createdBy {
+                        property('userName')
+                    }
+                }
+                'createdBy'{
+                    eq('id', this.id)
+                }
+            }
+        }
+        log.info("${topicNameList}")
+        return topicNameList
+    }
+
     Map getSubscribedTopics() {
 
         Map topicNameList = Subscription.createCriteria().list {
@@ -65,8 +114,34 @@ class User {
                         property('userName')
                     }
                 }
+                'createdBy'{
+                    eq('id', this.id)
+                }
             }
-            eq('createdBy.id', id)
+        }.inject([:]){ result, k ->
+            result << [(k[0]): k[1]+" by "+k[2]]
+
+        }
+        log.info("${topicNameList}")
+        return topicNameList
+    }
+
+    Map getPrivatelySubscribedTopics() {
+
+        Map topicNameList = Subscription.createCriteria().list {
+            projections {
+                'topic' {
+                    property('id')
+                    property('topicName')
+                    createdBy {
+                        property('userName')
+                    }
+                    eq('visibility', Visibility.PRIVATE)
+                }
+                'createdBy'{
+                    eq('id', id)
+                }
+            }
         }.inject([:]){ result, k ->
             result << [(k[0]): k[1]+" by "+k[2]]
 
@@ -77,10 +152,6 @@ class User {
 
     static List<ReadingItem> getUnReadItems(User user, SearchCO searchCO){
         List list = []
-        if(searchCO.q==null) {
-            printf "at null"
-            return null
-        }
 
         if (searchCO.q) {
             list = User.createCriteria().list {

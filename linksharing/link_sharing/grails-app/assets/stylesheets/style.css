@@ -37,8 +37,17 @@
 .trending-topics > li:last-child{
   border-bottom: none;
 }
-.trending-topic-profile-img{
-	margin: 20px 5px; border-radius: 5px;
+.trending-topics-profile-img{
+	margin: 5px 0;
+    border-radius: 5px;
+    max-width: 145px;
+    height: auto;
+}
+.post-profile-img{
+	margin: 5px 0;
+    border-radius: 5px;
+    max-width: 100px;
+    height: auto;
 }
 .inbox .panel-body > .row{
 	border-bottom: 1px solid #b2b2b2;
@@ -51,4 +60,33 @@
 .row-noMargin{
     margin-left: 0;
     margin-right: 0;
+}
+.subscription-select{
+    font-size: 12px;
+    min-width: 85px;
+}
+.subscription-invite-btn{
+    font-size: 22px;
+    vertical-align: text-bottom;
+}
+.panel-body-overflow {
+    padding: 15px;
+    max-height: 450px;
+    overflow-y: scroll;
+}
+.panel-body p, .panel-body h3, .panel-body h4, .panel-body h5, .panel-body h6 {
+    margin: 5px 0;
+    font-size: 14px;
+}
+.no-mar{
+    margin: 5px 0;
+}
+fs-14{
+    font-size: 14px;
+}
+.panel-footer{
+    margin: 0 10px;
+}
+.error{
+    color: red;
 }

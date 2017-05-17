@@ -5,6 +5,8 @@ class UrlMappings {
     static mappings = {
         get "/login"(controller: 'login', action: 'index')
         name login: "/login"(controller: 'login', action: 'loginHandler', method: 'POST')
+        name reset: "/reset"(controller: 'login', action: 'resetPassword', method: 'POST')
+        name resetSubmit: "/reset/submit"(controller: 'login', action: 'resetPasswordProcess', method: 'POST')
         get "/logout"(controller: 'login', action: 'logout')
 
         "/$controller/$action?/$id?(.$format)?"{

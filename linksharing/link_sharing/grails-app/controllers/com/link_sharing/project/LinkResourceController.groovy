@@ -29,8 +29,11 @@ class LinkResourceController {
                         )
                     }
                 }
-                linkResource.save(flush: true)
-                flash.message = "resource saved"
+                if(linkResource.save(flush: true)){
+                    flash.message = "resource saved"
+                } else{
+                    flash.error = linkResource.error.allErrors.join(', ')
+                }
             } else {
                 flash.error = "resource not saved"
             }

@@ -10,34 +10,121 @@ class ResourceController {
     def show(Long id) {
 
         Resource resource = Resource.get(id)
-        RatingInfoVO ratingInfoVO = resource.getRatingInfo()
-
-        render view: 'show'
+        RatingInfoVO ratingInfoVO = null
+        params.max = 5
+        params.offset = 0
+        List tt = Topic.getTrendingTopics(params)
+        if(resource){
+            log.info "here in resource"
+            ratingInfoVO = resource.getRatingInfo()
+        } else{
+            flash.error = "resource not found"
+            redirect(url: request.getHeader("referer"))
+        }
+        log.info "ratingInfo $ratingInfoVO"
+        render view: 'show', model: [
+                resource: resource,
+                trendingTopics: tt,
+                ratingInfo: ratingInfoVO
+        ]
     }
 
 
     def delete(Long id) {
 
+
+        if(session.user){
+            Resource resource = Resource.get(id)
+            log.info("resource ${resource}")
+            if(resource) {
+                if(session.user.admin || resource.createdBy.id == session.user.id) {
+                    resource.delete(flush: true)
+                    flash.message = "resource deleted"
+                    redirect(controller: 'user', action: 'index')
+                    return
+                } else{
+                    flash.error = "unauthorized request"
+                }
+            } else {
+                flash.error = "Resource not found."
+            }
+        } else{
+            flash.error = "please login to continue"
+        }
+        redirect(action: 'show', id: id)
+    }
+
+    def updateRating(Long id, Integer score) {
+
+        String msg = ""
+
+        if(session.user){
+
+            if(id && score){
+                Resource resource = Resource.load(id)
+                if(Subscription.findByTopicAndCreatedBy(resource.topic, resource.createdBy)) {
+                    ResourceRating rating = ResourceRating.findOrCreateByCreatedByAndResource(session.user, resource)
+                    //findOrCreateBy bcoz, rating doesn't exists for 1sst time
+                    rating.score = score
+                    if (rating.save(flush: true)) {
+                        msg = "resource rating updated!"
+                    } else {
+                        msg = rating.errors.allErrors.join(', ')
+                    }
+                } else {
+                   msg  = "unauthorized request, please subscribe this topic to rate"
+                }
+            } else{
+                msg = "invalid arguments"
+//                flash.error = "invalid arguments"
+            }
+
+        } else {
+            msg = "please login to continue"
+//            flash.error = "please login to continue"
+        }
+        render msg
+    }
+
+    def edit(Long id, String description){
         Resource resource = Resource.load(id)
 
         log.info("resource ${resource}")
-
-        if(resource) {
-            resource.delete(flush:true)
-            render "success"
-        } else {
-            render "Resource not found."
+        if(session.user){
+            if(resource) {
+                resource.description = description
+                if(resource.save(flush:true)){
+                    flash.message = "success"
+                } else{
+                    flash.error = "error while updating, please try again"
+                }
+            } else {
+                flash.error = "Resource not found."
+            }
+        } else{
+            flash.error = "please login to continue"
         }
+
+        redirect(url: request.getHeader("referer"))
     }
 
-    def search(ResourceSearchCO resourceSearchCO) {
-        def r
-        if (resourceSearchCO.q) {
-            resourceSearchCO.visibility = Visibility.PUBLIC
-            r = Resource.search(resourceSearchCO).list()
+    def search(ResourceSearchCO co) {
+        List searchPosts = []
+        if (co.q && !co.topicID) {
+            co.visibility = Visibility.PUBLIC
+        }
+        List<Resource> resources = Resource.search(co).list()
+        List tt = Topic.getTrendingTopics()
+        resources?.each {
+            searchPosts.add(ReadingItem.findByResource(it))
         }
 
-        render r
+        render(view: 'search', model: [
+                topPosts : null,
+                trendingTopics: tt,
+                posts : searchPosts
+        ])
+
     }
 
 }

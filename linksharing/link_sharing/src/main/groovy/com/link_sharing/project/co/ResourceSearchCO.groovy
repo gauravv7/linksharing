@@ -7,4 +7,5 @@ class ResourceSearchCO extends SearchCO {
 
     Long topicID
     Visibility visibility
+    Boolean global
 }

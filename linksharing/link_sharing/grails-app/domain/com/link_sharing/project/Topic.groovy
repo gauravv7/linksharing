@@ -5,6 +5,7 @@ import com.link_sharing.project.Subscription as Subscription
 import com.link_sharing.project.Resource as Resource
 import com.link_sharing.project.constants.Constants
 import com.link_sharing.project.vo.TopicVO
+import org.hibernate.criterion.CriteriaSpecification
 
 class Topic {
 
@@ -48,24 +49,24 @@ class Topic {
         }
     }
 
-    static List<TopicVO> getTrendingTopics() {
-        List<TopicVO> trendingTopics = []
-        Resource.createCriteria().list {
+    static def getTrendingTopics(def params){
+        return Resource.createCriteria().list {
+            resultTransformer CriteriaSpecification.ALIAS_TO_ENTITY_MAP
             projections {
-                createAlias('topic', 't')
-                groupProperty('t.id')
-                property('t.topicName')
-                property('t.visibility')
-                count('t.id', 'topicCount')
-                property('t.createdBy')
+                groupProperty('topic.id')
+                'topic'{
+                    property('id', 'topicID')
+                    property('topicName', 'topicName')
+                    property('visibility', 'visibility')
+                    property('createdBy', 'createdBy')
+                    count('id', 'topicCount')
+                }
             }
             order('topicCount', 'desc')
-            order('t.topicName', 'asc')
-            maxResults(5)
-        }?.each {
-            trendingTopics.add(new TopicVO(id: it[0], name: it[1], visibility: it[2], count: it[3], createdBy: it[4]))
+            order('topicName', 'asc')
+            maxResults((params.max as int)?: 5)
+            firstResult((params.offset as int)?: 0)
         }
-        return trendingTopics
     }
 
     def subscribedUsers() {

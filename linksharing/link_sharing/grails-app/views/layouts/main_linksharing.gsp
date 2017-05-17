@@ -24,12 +24,38 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="#">Link Sharing</a>
+              <a class="navbar-brand" href="/login">Link Sharing</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse pull-right" id="bs-example-navbar-collapse-1">
-              <g:pageProperty name="page.nav" />
+                <g:form class="navbar-form navbar-left" method="get" controller="resource" action="search">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="q" placeholder="Search">
+                    </div>
+                </g:form>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <g:if test="${session.user}">
+                        <g:pageProperty name="page.nav" />
+                        <li><li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>${session.user.userName}<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="${createLink(controller: 'user', action: 'profile', id: session.user.id)}">Profile</a></li>
+                                <g:if test="${session.user.admin}">
+                                    <li><a href="${createLink(controller: 'user', action: 'all')}">Show all User</a></li>
+                                </g:if>
+                                <li><a href="${createLink(controller: 'user', action: 'edit')}">Edit Profile</a></li>
+                                <li><a href="/logout">Logout</a></li>
+                            </ul>
+                        </li>
+                    </g:if>
+                    <g:if test="${!session.user}" >
+                        <li><li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li></li>
+                    </g:if>
+                </ul>
+
             </div><!-- /.navbar-collapse -->
           </div><!-- /.container-fluid -->
         </nav>
@@ -37,10 +63,16 @@
 
     <div class="container-fluid">
         <g:if test="${flash.error}">
-            <div class="alert alert-danger"><p>${flash.error}</p></div>
+            <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <p>${flash.error}</p>
+            </div>
         </g:if>
         <g:if test="${flash.message}">
-            <div class="alert alert-success" style="display: block"><p>${flash.message}</p></div>
+            <div class="alert alert-success" style="display: block">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <p>${flash.message}</p>
+            </div>
         </g:if>
     </div>
 

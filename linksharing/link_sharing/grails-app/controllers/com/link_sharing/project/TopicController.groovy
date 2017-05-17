@@ -10,10 +10,19 @@ class TopicController {
 
     def show(Long id, ResourceSearchCO co) {
         Topic topic = Topic?.read(id)
+        params.max = 5
+        params.offset = 0
 
         if(topic) {
+            List subscribedUsers = topic.subscribedUsers()
+            List posts = Resource.findAllByTopicAndCreatedBy(topic, topic.createdBy, params)
+            def postsCount = Resource.countByTopicAndCreatedBy(topic, topic.createdBy)
+            log.info "subscribedUsers: $subscribedUsers"
+            Subscription seriousness = Subscription.findByTopicAndCreatedBy(topic, topic.createdBy)
             if (topic.visibility == Visibility.PUBLIC) {
-                render view: 'show'
+                render view: 'show', model: [
+                        subscribedUsers: subscribedUsers, topic: topic, posts: posts, subscription: seriousness, postsCount: postsCount
+                ]
             } else if (topic.visibility == Visibility.PRIVATE) {
                 if (Subscription?.findByCreatedByAndTopic(session.user, topic)) {
                     render view: 'show'
@@ -31,18 +40,29 @@ class TopicController {
         }
     }
 
-    def delete(Long id) {
+    def filterForPosts(){
+        Topic topic = Topic?.read(id)
+        render(template:"/topic/trendingTopics" ,model:[ posts: Resource.findAllByTopicAndCreatedBy(topic, topic.createdBy, params)])
+    }
 
-        Topic topic = Topic.load(id)
+    def remove(Long topicId) {
+        if(session.user){
+            Topic topic = Topic.load(topicId)
+            if (topic) {
+                log.info "topic createdBy id $topic.createdBy.id"
+                log.info "user session id $session.user.id"
+                if(topic.createdBy.id == session.user.id){
+                    topic.delete(flush: true)
+                    flash.message = "Topic deleted"
+                }
+            } else {
+                flash.error = "Topic not found"
+            }
+        } else{
+            flash.error = "user not logged in"
+        }
 
-        if(topic) {
-            log.info("topic ${topic}")
-            topic.delete(flush:true)
-            render "success"
-        }
-        else {
-            render "topic not found."
-        }
+        redirect(url: request.getHeader("referer"))
     }
 
     def save(TopicCO topicCO) {
@@ -67,4 +87,21 @@ class TopicController {
     } // save
 
     def email() {}
+
+    def updateVisibility(Long topicId, String visibility){
+        log.info "$topicId"
+        log.info "$visibility"
+        if(session.user){
+            Topic topic = Topic.load(topicId)
+            topic.visibility = Visibility.checkVisibility(visibility)
+            if(topic.save(flush: true)){
+                flash.message = "visibility updated"
+            } else{
+                flash.error = topic.errors.allErrors.join(", ")
+            }
+        } else{
+            flash.error = "user not logged in"
+        }
+        redirect(url: request.getHeader("referer"))
+    }
 }
