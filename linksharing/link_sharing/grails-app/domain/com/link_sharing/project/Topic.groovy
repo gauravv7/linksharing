@@ -54,17 +54,26 @@ class Topic {
             projections {
                 createAlias('topic', 't')
                 groupProperty('t.id')
-                property('t.topicname')
+                property('t.topicName')
                 property('t.visibility')
                 count('t.id', 'topicCount')
                 property('t.createdBy')
             }
             order('topicCount', 'desc')
-            order('t.topicname', 'asc')
+            order('t.topicName', 'asc')
             maxResults(5)
         }?.each {
             trendingTopics.add(new TopicVO(id: it[0], name: it[1], visibility: it[2], count: it[3], createdBy: it[4]))
         }
         return trendingTopics
+    }
+
+    def subscribedUsers() {
+        return Subscription.createCriteria().list {
+            projections {
+                property('createdBy')
+            }
+            eq('topic', this)
+        }
     }
 }

@@ -12,7 +12,7 @@ class ResourceController {
         Resource resource = Resource.get(id)
         RatingInfoVO ratingInfoVO = resource.getRatingInfo()
 
-        render ratingInfoVO
+        render view: 'show'
     }
 
 

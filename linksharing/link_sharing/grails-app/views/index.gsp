@@ -1,78 +1,141 @@
 <!doctype html>
 <html>
 <head>
-    <meta name="layout" content="main"/>
     <title>Welcome to Grails</title>
 
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico" />
 </head>
 <body>
     <content tag="nav">
-        <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Application Status <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                <li><a href="#">Environment: ${grails.util.Environment.current.name}</a></li>
-                <li><a href="#">App profile: ${grailsApplication.config.grails?.profile}</a></li>
-                <li><a href="#">App version:
-                    <g:meta name="info.app.version"/></a>
-                </li>
-                <li role="separator" class="divider"></li>
-                <li><a href="#">Grails version:
-                    <g:meta name="info.app.grailsVersion"/></a>
-                </li>
-                <li><a href="#">Groovy version: ${GroovySystem.getVersion()}</a></li>
-                <li><a href="#">JVM version: ${System.getProperty('java.version')}</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="#">Reloading active: ${grails.util.Environment.reloadingAgentEnabled}</a></li>
-            </ul>
-        </li>
-        <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Artefacts <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                <li><a href="#">Controllers: ${grailsApplication.controllerClasses.size()}</a></li>
-                <li><a href="#">Domains: ${grailsApplication.domainClasses.size()}</a></li>
-                <li><a href="#">Services: ${grailsApplication.serviceClasses.size()}</a></li>
-                <li><a href="#">Tag Libraries: ${grailsApplication.tagLibClasses.size()}</a></li>
-            </ul>
-        </li>
-        <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Installed Plugins <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                <g:each var="plugin" in="${applicationContext.getBean('pluginManager').allPlugins}">
-                    <li><a href="#">${plugin.name} - ${plugin.version}</a></li>
-                </g:each>
-            </ul>
-        </li>
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Search">
+            </div>
+        </form>
     </content>
 
-    <div class="svg" role="presentation">
-        <div class="grails-logo-container">
-            <asset:image src="grails-cupsonly-logo-white.svg" class="grails-logo"/>
-        </div>
-    </div>
+    <div class="container-fluid">
+        <div class="row" style="padding: 2px 15px;">
+            <div class="col-md-7" >
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        Recent Shares
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <img src="http://lorempixel.com/130/135/city/" alt="" style="margin: 5px; border-radius: 5px;">
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <h5>
+                                            FName LName <span>@firstName</span>
+                                        </h5>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <h5 class="text-right">Grails</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p>
+                                            <span>f</span>
+                                            <span>t</span>
+                                            <span>g+</span>
+                                        </p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <a class="text-right" style="display: block">view resource</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- row -->
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <img src="http://lorempixel.com/130/135/city/" alt="" style="margin: 5px; border-radius: 5px;">
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <h5>
+                                            FName LName <span>@firstName</span>
+                                        </h5>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <h5 class="text-right">Grails</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p>
+                                            <span>f</span>
+                                            <span>t</span>
+                                            <span>g+</span>
+                                        </p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <a class="text-right" style="display: block">view resource</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- row -->
+                    </div> <!-- body-->
+                </div>
 
-    <div id="content" role="main">
-        <section class="row colset-2-its">
-            <h1>Welcome to Grails</h1>
-
-            <p>
-                Congratulations, you have successfully started your first Grails application! At the moment
-                this is the default page, feel free to modify it to either redirect to a controller or display
-                whatever content you may choose. Below is a list of controllers that are currently deployed in
-                this application, click on each to execute its default action:
-            </p>
-
-            <div id="controllers" role="navigation">
-                <h2>Available Controllers:</h2>
-                <ul>
-                    <g:each var="c" in="${grailsApplication.controllerClasses.sort { it.fullName } }">
-                        <li class="controller">
-                            <g:link controller="${c.logicalPropertyName}">${c.fullName}</g:link>
-                        </li>
-                    </g:each>
-                </ul>
+                <br/>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        Top Posts
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <img src="http://lorempixel.com/130/135/city/" alt="" style="margin: 5px; border-radius: 5px;">
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <h5>
+                                            FName LName <span>@firstName</span>
+                                        </h5>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <h5 class="text-right">Grails</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p>
+                                            <span>f</span>
+                                            <span>t</span>
+                                            <span>g+</span>
+                                        </p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <a class="text-right" style="display: block">view resource</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- row -->
+                    </div> <!-- body-->
+                </div>
             </div>
-        </section>
+            <div class="col-md-5">
+                <g:render template="/auth/login" />
+                <g:render template="/auth/register" />
+
+            </div>
+        </div>
     </div>
 
 </body>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ======1_introduction_to_grails==
 1	Create basic grails app (linksharing) and add .gitignore files for excluding files from git
 2	Change default package of grails app in application.yml
@@ -172,3 +173,26 @@
 
 7. Write integration tests where criteria and hql queris are used
  -Create linksharing_test database for testing, which should be used in a testing environment.
+=======7_views
+1  Add application layout
+2  Application layout should use bootstrap and font awesome
+3  All the previous unused files of css, images, js should be removed and only required files should be committed
+4  Single js and single js file should be included using asset tag other css and js sould be included in main js, as per the syntex of asset pipeline
+5  All the static resource should be in assets folder, no need to add jquery as this plugin is already added in grails BuildConfig by default
+6  Update layout main.gsp according to the document mentioned in intro to linksharing, add flash message and flash error in layout by using g:if tag
+7  Add templates topic/create topic/email linkResource/create documentResource/create and include them in layout which will be opened in modal window by clicking on header links. These links and templates are added only when user is logged in
+8  Implement topic/save and linkresource/save save action. Topic, linkresource save should set errors in flash and user should redirected to the dashboard, successful save should set flash.message.
+9  Login should work from login form on home page and show top posts and recent post on home page
+10  Create templates for resource/show topic/show user/login user/register
+11  Create static method in topic to get trending topic which will be used on user dashboard as well as resource show action
+12  Add createdBy in topicVO so that createdBy can be shown in trending topic list on UI
+13  Create transient method in user domain getSubscribedTopic to get only subscribed topics of user, this method will be used in user dashboard and dropdown of linkresource create and email invite of topic
+14  Add /user/forgotPassword template which will show up on click on forgotPassword link in login form
+15  Update test cases accordingly
+16  Tags which will be used for this are layouthead, layoutbody, layouttitle, select, if, else, render, message, asset:javascript,stylesheet, actionsubmit, form, filed, each, img, paginate, uploadform
+17  Implement Topic show page
+18  Create transient method getSubscribedUsers in topic domain to get all the subscribed users
+19  Create user/_show template from user index page which take user as model and use this template to show subscribed user list in topic show page and user index page
+20  Change links on subscriptions and posts in topic/_show template to topic show action
+21  Implement search on posts header of topic show pass topic id as hidden field in form and also pass it in pagination parameters
+22  Update test cases with new changes

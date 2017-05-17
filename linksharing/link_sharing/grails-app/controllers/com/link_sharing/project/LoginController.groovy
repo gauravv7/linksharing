@@ -1,17 +1,20 @@
 package com.link_sharing.project
 
+import com.link_sharing.project.vo.LoginVO
+import com.link_sharing.project.vo.TopicVO
+
 class LoginController {
 
     def index() {
         if (session?.user) {
             forward(controller: 'user', action: 'index')
         } else {
-            response.sendError(404)
+            render view: '/index'
         }
     }
 
-    def loginHandler(String userName, String password) {
-        User user = User.findByUserNameAndPassword(userName, password)
+    def loginHandler(LoginVO loginVO) {
+        User user = User.findByUserNameAndPassword(loginVO.username, loginVO.password)
 
         if (user) {
             if (user.active) {

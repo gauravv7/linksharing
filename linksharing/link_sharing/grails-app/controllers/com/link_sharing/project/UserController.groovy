@@ -6,7 +6,9 @@ class UserController {
 
     def index(SearchCO searchCO) {
         List l = User.getUnReadItems(session.user, searchCO)
-        log.info("$l")
-        render l?: "user dashborad for user ${session.user.userName}"
+        log.info("search items\n$l")
+            log.info("search items\n${session.user?.getSubscribedTopics()}")
+        render view: 'dashboard'
+
     }
 }
