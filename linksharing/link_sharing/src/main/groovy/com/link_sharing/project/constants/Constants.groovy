@@ -15,4 +15,5 @@ class Constants {
     static final String SALT = "someSalt"
     static final String DOCUMENT_CONTENT_TYPE = "application/pdf"
     static final String DEFAULT_USER_PHOTO="default-user.png"
+    static final String DEFAULT_DOCUMENT="test.pdf"
 }
