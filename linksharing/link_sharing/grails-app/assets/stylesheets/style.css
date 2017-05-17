@@ -65,6 +65,6 @@
 }
 .panel-body-overflow {
     padding: 15px;
-    max-height: 250px;
+    max-height: 450px;
     overflow-y: scroll;
 }

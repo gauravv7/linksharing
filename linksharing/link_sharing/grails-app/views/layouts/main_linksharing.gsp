@@ -38,12 +38,17 @@
                 <ul class="nav navbar-nav navbar-right">
                     <g:if test="${session.user}">
                         <g:pageProperty name="page.nav" />
+                        <li><li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>${session.user.userName}<span class="caret"></span></a>
                             <ul class="dropdown-menu">
+                                <li><a href="${createLink(controller: 'user', action: 'profile', id: session.user.id)}">Profile</a></li>
                                 <li><a href="/logout">Logout</a></li>
                             </ul>
                         </li>
+                    </g:if>
+                    <g:if test="${!session.user}" >
+                        <li><li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li></li>
                     </g:if>
                 </ul>
 

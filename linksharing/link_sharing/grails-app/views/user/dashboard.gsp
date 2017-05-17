@@ -155,7 +155,7 @@
               <div class="panel-heading">
                 Inbox
               </div>
-              <div class="panel-body">
+              <div class="panel-body panel-body-overflow">
                   <g:each in="${unreadItems}" var="item">
                       <g:render template="/resource/post" model="[item: item]"></g:render>
                   </g:each>
