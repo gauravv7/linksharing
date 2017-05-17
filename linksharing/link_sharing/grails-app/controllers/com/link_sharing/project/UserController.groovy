@@ -15,7 +15,10 @@ class UserController {
     def fileUploadService
 
     def index(SearchCO searchCO) {
-        List unreadItems = ReadingItem.findAllByUserAndIsRead(session.user, false, [sort: "dateCreated", order: "desc"])
+        params.max = 5
+        params.offset = 0
+        List unreadItems = ReadingItem.findAllByUserAndIsRead(session.user, false, params)
+        def unreadItemsCount = ReadingItem.countByUserAndIsRead(session.user, false)
         List tt = Topic.getTrendingTopics()
         log.info("user id is from uc: $session.user.id")
         log.info("unread items\n$unreadItems")
@@ -29,9 +32,15 @@ class UserController {
                 unreadItems: unreadItems,
                 userSubscriptions: session.user?.userSubscriptions(),
                 trendingTopics: tt,
+                unreadItemsCount: unreadItemsCount,
                 subscribedTopics: session.user?.getSubscribedTopics()
         ]
 
+    }
+
+
+    def filterForInbox(){
+        render(template:"/resource/post" ,model:[ unreadItems: ReadingItem.findAllByUserAndIsRead(session.user, false, params)])
     }
 
     def invite(String code) {
@@ -125,7 +134,11 @@ class UserController {
 
         List topics = Topic.findAllByCreatedByAndVisibility(user, Visibility.PUBLIC)
         def subscribedTopics = Subscription.findAllByCreatedBy(user)
-        def posts = Resource.findAllByCreatedBy(user, [max: 5, sort:'id', order: 'desc'])
+        params.max = 5
+        params.idForProfileFilter = user.id
+        params.offset = 0
+        def posts = Resource.findAllByCreatedBy(user, params)
+        def postsCount = Resource.countByCreatedBy(user, params)
 
         log.info "subscribedTopics for profile $subscribedTopics"
         log.info "profile topics $topics"
@@ -134,8 +147,14 @@ class UserController {
                 user: user,
                 subscribedTopics: subscribedTopics,
                 topics: topics,
-                posts: posts
+                posts: posts,
+                postsCount: postsCount
         ]
+    }
+
+
+    def filterForProfile(){
+        render(template:"/topic/topicPost" ,model:[ posts: Resource.findAllByCreatedBy(User.get(params.idForProfileFilter), params)])
     }
 
     def edit(){

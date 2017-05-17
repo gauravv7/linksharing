@@ -134,11 +134,15 @@
               <div class="panel-heading">
                 Inbox
               </div>
-              <div class="panel-body panel-body-overflow">
-                  <g:each in="${unreadItems}" var="item">
-                      <g:render template="/resource/post" model="[item: item]"></g:render>
-                  </g:each>
-              </div> <!-- body-->
+                <div class="panel-body">
+                      <div  id="listTemplateDivId">
+                          <g:render template="/resource/post" model="[item: $unreadItems]"></g:render>
+                      </div>
+                </div> <!-- body-->
+                <div class="panel-footer">
+                    <util:remotePaginate controller="user" action="filterForInbox" total="${unreadItemsCount}"
+                                     update="listTemplateDivId" prev="prev" max="5" params="${params}"/>
+                </div>
             </div>
           </div> <!-- row inbox-->
 

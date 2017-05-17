@@ -132,11 +132,15 @@
               <div class="panel-heading">
                 Posts
               </div>
-              <div class="panel-body">
-                  <g:each in="${posts}" var="item">
-                      <g:render template="/topic/topicPost" model="[item: item]"></g:render>
-                  </g:each>
-              </div> <!-- body-->
+                <div class="panel-body">
+                    <div  id="listTemplateDivId">
+                        <g:render template="/topic/topicPost" model="[item: $posts]"></g:render>
+                    </div>
+                </div> <!-- body-->
+                <div class="panel-footer">
+                    <util:remotePaginate controller="user" action="filterForProfile" total="${postsCount}"
+                                         update="listTemplateDivId" prev="prev" max="5" params="${params}"/>
+                </div>
             </div>
           </div> <!-- row inbox-->
 
