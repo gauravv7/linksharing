@@ -5,6 +5,9 @@ import com.link_sharing.project.vo.RatingInfoVO
 
 class ResourceController {
 
+    def topicService
+    def resourceRatingService
+
     def index() { }
 
     def show(Long id) {
@@ -13,10 +16,10 @@ class ResourceController {
         RatingInfoVO ratingInfoVO = null
         params.max = 5
         params.offset = 0
-        List tt = Topic.getTrendingTopics(params)
+        List tt = topicService.getTrendingTopics(params)
         if(resource){
             log.info "here in resource"
-            ratingInfoVO = resource.getRatingInfo()
+            ratingInfoVO = resourceRatingService.getRatingInfo(resource.id)
         } else{
             flash.error = "resource not found"
             redirect(url: request.getHeader("referer"))
