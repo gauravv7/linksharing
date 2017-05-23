@@ -7,13 +7,15 @@ import com.link_sharing.project.vo.TopicVO
 
 class LinkResourceController {
 
+    def topicService
+
     def save(LinkResourceCO linkResourceCO) {
         log.info("${linkResourceCO}")
         LinkResource linkResource = new LinkResource(url: linkResourceCO.url, description: linkResourceCO.description, topic: Topic.get(linkResourceCO.topic), createdBy: session.user)
 //        linkResource.createdBy = session.user
         if (linkResource.validate()) {
             if (linkResource) {
-                List<User> subscribedUsers = linkResource.topic.subscribedUsers()
+                List<User> subscribedUsers = topicService.subscribedUsers(linkResource.topic)
                 subscribedUsers.each {
                     if (it.id != session.user.id) {
                         linkResource.addToReadingItems(new ReadingItem(
