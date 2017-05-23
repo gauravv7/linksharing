@@ -2,6 +2,7 @@ package com.link_sharing.project
 
 import com.link_sharing.project.co.InviteCO
 import com.link_sharing.project.co.SearchCO
+import com.link_sharing.project.co.SubscriptionCO
 import com.link_sharing.project.co.UserCO
 import com.link_sharing.project.constants.Constants
 import com.link_sharing.project.utils.EncryptUtils
@@ -13,65 +14,76 @@ class UserController {
 
     def mailService
     def fileUploadService
+    def readingItemService
+    def subscriptionService
+    def topicService
+    def userService
+    def invitationService
+    def resourceService
 
     def index(SearchCO searchCO) {
         params.max = 5
         params.offset = 0
-        List unreadItems = ReadingItem.findAllByUserAndIsRead(session.user, false, params)
-        def unreadItemsCount = ReadingItem.countByUserAndIsRead(session.user, false)
-        def subscriptionCount = Subscription.countByCreatedBy(session.user)
-        List trendingTopics = Topic.getTrendingTopics(params)
+        List unreadItems = readingItemService.findAllByUserAndIsRead(session.user, false, params)
+        def unreadItemsCount = readingItemService.countByUserAndIsRead(session.user, false)
+        def subscriptionCount = subscriptionService.countByCreatedBy(session.user)
+        List trendingTopics = topicService.getTrendingTopics(params)
         def trendingTopicsCount = trendingTopics.size()
+        def privatelySubscribedTopics = userService.getPrivatelySubscribedTopics(session.user.id?: 1)
+
         log.info("user id is from uc: $session.user.id")
         log.info("unread items\n$unreadItems")
-        log.info("sbs topics \n${session.user?.getSubscribedTopics()}")
-        log.info("user sbs \n${session.user?.userSubscriptions(params)}")
+        log.info("sbs topics \n${userService.getUserSubscribedTopics(session.user.id)}")
+
+        log.info("user sbs \n${userService.getUserSubscriptions(session.user.id, params)}")
         log.info("user sbs size \n${subscriptionCount}")
         log.info("user trdntopic \n${trendingTopics}")
         log.info("user trdntopic size\n${trendingTopicsCount}")
         render view: 'dashboard', model: [
                 listVisibility: Visibility.values().toList(),
                 unreadItems: unreadItems,
-                userSubscriptions: session.user?.userSubscriptions([max: 2, offset: 0]),
+                userSubscriptions: userService.getUserSubscriptions(session.user.id, params),
                 subscriptionCount: subscriptionCount,
                 trendingTopics: trendingTopics,
                 trendingTopicsCount: trendingTopicsCount,
                 unreadItemsCount: unreadItemsCount,
-                subscribedTopics: session.user?.getSubscribedTopics()
+                privatelySubscribedTopics: privatelySubscribedTopics,
+                subscribedTopics: userService.getUserSubscribedTopics(session.user.id)
         ]
 
     }
 
 
     def filterForTrendingTopics(){
-        render(template:"/topic/trendingTopics" ,model:[ trendingTopics: Topic.getTrendingTopics(params)])
+        render(template:"/topic/trendingTopics" ,model:[ trendingTopics: topicService.getTrendingTopics(params)])
     }
 
     def filterForSubscriptions(){
-        render(template:"/user/subscriptions" ,model:[ userSubscriptions: session.user?.userSubscriptions(params)])
+        render(template:"/user/subscriptions" ,model:[ userSubscriptions: userService.getUserSubscriptions(session.user.id, params)])
     }
 
 
     def filterForInbox(){
-        render(template:"/resource/post" ,model:[ unreadItems: ReadingItem.findAllByUserAndIsRead(session.user, false, params)])
+        render(template:"/resource/post" ,model:[ unreadItems: readingItemService.findAllByUserAndIsRead(session.user, false, params)])
     }
 
     def invite(String code) {
         code = URLDecoder.decode(code, "UTF-8")
         log.info "$code"
         if(code){
-            Invitation invitation = Invitation.findByUrlHash(code)
+            Invitation invitation = invitationService.findByUrlHash(code)
             log.info "$invitation"
             if(invitation){
                 Topic topic = invitation.topic
-                User user = User.findByEmail(invitation.invited)
+                User user = userService.findByEmail(invitation.invited)
                 log.info "user is $user ${invitation.invited}"
-                Subscription subscription = new Subscription(createdBy: user, topic: topic,seriousness: Seriousness.CASUAL)
-                if (subscription.save(flush: true)) {
-                    invitation.delete()
+                SubscriptionCO subscriptionCO = new SubscriptionCO(createdBy: user, topic: topic,seriousness: Seriousness.CASUAL)
+                if (subscriptionCO.validate()) {
+                    subscriptionService.save(subscriptionCO)
+                    invitationService.delete(invitation.id)
                     flash.message = "Subscription saved successfully"
                 } else {
-                    flash.error = subscription.errors.allErrors.collect { message(error: it) }.join(", ")
+                    flash.error = subscriptionCO.errors.allErrors.collect { message(error: it) }.join(", ")
                 }
             } else {
                 flash.error = "invalid invitation request, invitation doesnot exist"
@@ -82,14 +94,14 @@ class UserController {
 
     def sendInvite(InviteCO inviteCO) {
         log.info("$inviteCO")
-        User user = User.findByEmail(inviteCO.email)
+        User user = userService.findByEmail(inviteCO.email)
         if(user){
-            Subscription subscription = Subscription.findByCreatedByAndTopic(user, Topic.load(inviteCO.topic))
+            Subscription subscription = subscriptionService.findByCreatedByAndTopic(user, inviteCO.topic)
             if(!subscription){
 
                 String hashed = EncryptUtils.encryptSHA256("${session.user}${inviteCO.email}${inviteCO.topic}${Constants.SALT}" as String)
 
-                Invitation invitation = new Invitation(invitee: session.user, invited: inviteCO.email, topic: inviteCO.topic, urlHash: hashed)
+                Invitation invitation = new Invitation(invitee: session.user, invited: inviteCO.email, topic: Topic.load(inviteCO.topic), urlHash: hashed)
                 if(invitation.validate()){
                     String text1 = createLink(controller: 'user', action: 'invite', params: [code: hashed], absolute: true)
                     log.info text1
@@ -145,20 +157,21 @@ class UserController {
             user = session.user
         }
 
-        List topics = Topic.findAllByCreatedByAndVisibility(user, Visibility.PUBLIC)
-        def subscribedTopics = Subscription.findAllByCreatedBy(user)
+        List topics = topicService.findAllByCreatedByAndVisibility(user, Visibility.PUBLIC)
+        def subscriptions = subscriptionService.findAllByCreatedBy(user)
         params.max = 5
         params.idForProfileFilter = user.id
         params.offset = 0
-        def posts = Resource.findAllByCreatedBy(user, params)
-        def postsCount = Resource.countByCreatedBy(user, params)
+        def posts = resourceService.findAllByCreatedBy(user, params)
+        def postsCount = resourceService.countByCreatedBy(user, params)
 
-        log.info "subscribedTopics for profile $subscribedTopics"
+        log.info "subscribedTopics for profile $subscriptions"
         log.info "profile topics $topics"
 
         render view: 'profile', model: [
                 user: user,
-                subscribedTopics: subscribedTopics,
+                subscribedTopics: userService.getUserSubscribedTopics(session.user.id),
+                subscriptions: subscriptions,
                 topics: topics,
                 posts: posts,
                 postsCount: postsCount
@@ -167,7 +180,7 @@ class UserController {
 
 
     def filterForProfile(){
-        render(template:"/topic/topicPost" ,model:[ posts: Resource.findAllByCreatedBy(User.get(params.idForProfileFilter), params)])
+        render(template:"/topic/topicPost" ,model:[ posts: resourceService.findAllByCreatedBy(User.get(params.idForProfileFilter), params)])
     }
 
     def edit(){
@@ -175,40 +188,19 @@ class UserController {
     }
 
     def updateProfile(UserCO userCO){
-        User user = User.get(session.user.id)
-        user.firstName = userCO.firstName
-        user.lastName = userCO.lastName
-        user.userName = userCO.userName
-        user.password = user.password
-        user.confirmPassword = user.password
-
-        if(userCO.photograph.bytes.length){
-            String finalFileName = fileUploadService.getUniqueFileName(userCO.photograph)
-
-            if( fileUploadService.uploadFile(userCO.photograph, finalFileName, Constants.LOC_PHOTO_RESOURCE) ){
-                user.photo = finalFileName
-            } else{
-                flash.error = "error while uploading photograph, try again"
-            }
-        }
-        if(user.save(flush: true)){
-            flash.message = "user updated"
-        } else{
-            flash.error = user.errors.allErrors.join(", ")
+        Map result = userService.updateProfile(userCO, session.user.id)
+        if(!response.message.empty){
+            flash[(response.success)?'message': 'error'] = response.message
         }
         redirect(url: request.getHeader("referer"))
     }
 
     def updatePassword(String password, String confirmPassword){
-        User user = User.get(session.user.id)
-        if(user){
+        if(session.user){
             if(password.equals(confirmPassword)){
-                user.password = password
-                user.confirmPassword = confirmPassword
-                if(user.save(flush: true)){
-                    flash.message = "Password has been reset"
-                } else{
-                    flash.error = user.errors.allErrors.join(", ")
+                Map response = userService.updatePassword(session.user.id, password)
+                if(!response.message.empty){
+                    flash[(response.success)?'message': 'error'] = response.message
                 }
             } else {
                 flash.error = "passwords are not equal"
@@ -227,18 +219,9 @@ class UserController {
 
         if(id){
 
-            User user = User.get(id)
-            if(user){
-                user.active = !user.active
-                user.password = user.password
-                user.confirmPassword = user.password
-                if(user.save(flush: true)){
-                    flash.message = "user activation updated"
-                } else{
-                    flash.error = user.errors.allErrors.join(', ')
-                }
-            } else{
-                flash.error = "user not found"
+            Map response = userService.toggleActive(id)
+            if(!response.message.empty){
+                flash[(response.success)?'message': 'error'] = response.message
             }
         }
         redirect(url: request.getHeader("referer"))

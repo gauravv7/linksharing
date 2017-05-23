@@ -83,7 +83,7 @@
                         </div>
                         <div class="panel-body panel-body-overflow">
                             <ul class="list-unstyled trending-topics">
-                                <g:each in="${subscribedTopics}" var="us">
+                                <g:each in="${subscriptions}" var="us">
                                     <li>
                                         <div class="row">
                                             <div class="col-sm-12">
