@@ -11,13 +11,17 @@ class LoginController {
 
     def mailService
     def fileUploadService
+    def resourceService
+    def userService
+    def resetPasswordService
+    def resourceRatingService
 
     def index() {
         if (session?.user) {
             forward(controller: 'user', action: 'index')
         } else {
-            List recentShares = Resource.recentPosts()
-            List topPosts = Resource.getTopPosts()
+            List recentShares = resourceService.recentPosts()
+            List topPosts = resourceRatingService.getTopPosts()
 
             log.info "recentShares: $recentShares"
             log.info "postts: $topPosts"
@@ -29,7 +33,7 @@ class LoginController {
     }
 
     def loginHandler(LoginVO loginVO) {
-        User user = User.findByUserNameAndPassword(loginVO.username, loginVO.password)
+        User user = userService.findByUserNameAndPassword(loginVO.username, loginVO.password)
 
         if (user) {
             if (user.active) {
@@ -58,7 +62,7 @@ class LoginController {
         code = URLDecoder.decode(code, "UTF-8")
         log.info "$code"
         if(code){
-            ResetPassword resetPassword = ResetPassword.findByUrlHash(code)
+            ResetPassword resetPassword = resetPasswordService.findByUrlHash(code)
             log.info "$resetPassword"
             if(resetPassword){
                 User user = User.findByEmail(resetPassword.email)
