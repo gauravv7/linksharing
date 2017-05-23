@@ -20,9 +20,7 @@ class ReadingItem {
             user    : User
     ]
 
-    static boolean updateIsRead(long id, boolean isRead) {
-        ReadingItem.executeUpdate('Update ReadingItem set isRead=:read where id=:i',[read:isRead,i:id])
-    }
+
 
     String toString() {
         return "${user} read the ${resource}: ${isRead}"
