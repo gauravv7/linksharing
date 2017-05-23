@@ -6,6 +6,10 @@ import com.link_sharing.project.co.TopicCO
 
 class TopicController {
 
+    def topicService
+    def resourceService
+    def subscriptionService
+
     def index() { }
 
     def show(Long id, ResourceSearchCO co) {
@@ -14,18 +18,20 @@ class TopicController {
         params.offset = 0
 
         if(topic) {
-            List subscribedUsers = topic.subscribedUsers()
-            List posts = Resource.findAllByTopicAndCreatedBy(topic, topic.createdBy, params)
-            def postsCount = Resource.countByTopicAndCreatedBy(topic, topic.createdBy)
+            List subscribedUsers = topicService.subscribedUsers(topic)
+            List posts = resourceService.findAllByTopicAndCreatedBy(topic, topic.createdBy, params)
+            def postsCount = resourceService.countByTopicAndCreatedBy(topic, topic.createdBy)
             log.info "subscribedUsers: $subscribedUsers"
-            Subscription seriousness = Subscription.findByTopicAndCreatedBy(topic, topic.createdBy)
+            Subscription seriousness = subscriptionService.findByCreatedByAndTopic(topic.createdBy, topic.id)
             if (topic.visibility == Visibility.PUBLIC) {
                 render view: 'show', model: [
                         subscribedUsers: subscribedUsers, topic: topic, posts: posts, subscription: seriousness, postsCount: postsCount
                 ]
             } else if (topic.visibility == Visibility.PRIVATE) {
-                if (Subscription?.findByCreatedByAndTopic(session.user, topic)) {
-                    render view: 'show'
+                if (subscriptionService.findByCreatedByAndTopic(session.user, topic.id)) {
+                    render view: 'show', model: [
+                            subscribedUsers: subscribedUsers, topic: topic, posts: posts, subscription: seriousness, postsCount: postsCount
+                    ]
                 }
                 else {
                     flash.error = "Cannot access private topic"
