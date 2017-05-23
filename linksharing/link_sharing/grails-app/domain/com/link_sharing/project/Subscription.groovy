@@ -26,16 +26,7 @@ class Subscription {
     static belongsTo = [createdBy:User,
                         topic:Topic]
 
-    Integer getSubsciptionCount(){
-        def s = Subscription.createCriteria()
 
-        def subscribers = s.count {
-            eq("topic", this.topic)
-
-        }
-
-        return subscribers
-    }
 
     String toString() {
 
