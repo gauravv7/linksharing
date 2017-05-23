@@ -7,6 +7,7 @@ import com.link_sharing.project.utils.QueryUtils
 class DocumentResourceController {
 
     def fileUploadService
+    def topicService
 
     def save(DocumentResourceCO documentResourceCO) {
         log.info "${documentResourceCO}"
@@ -19,7 +20,7 @@ class DocumentResourceController {
                     description: documentResourceCO.description, topic: Topic.get(documentResourceCO.topic), createdBy: session.user)
             if (documentResource.validate()) {
                 if (documentResource) {
-                    List<User> subscribedUsers = documentResource.topic.subscribedUsers()
+                    List<User> subscribedUsers = topicService.subscribedUsers(documentResource.topic)
                     subscribedUsers.each {
                         if (it.id != session.user.id) {
                             documentResource.addToReadingItems(new ReadingItem(
